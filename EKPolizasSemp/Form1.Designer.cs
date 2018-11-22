@@ -52,6 +52,10 @@
             this.checkBoxX4 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.checkBoxX5 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.progressBarX5 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.progressBarX4 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.progressBarX3 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.progressBarX2 = new DevComponents.DotNetBar.Controls.ProgressBarX();
             this.labelX5 = new DevComponents.DotNetBar.LabelX();
             this.textBoxX6 = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.textBoxX5 = new DevComponents.DotNetBar.Controls.TextBoxX();
@@ -64,11 +68,9 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.progressBarX2 = new DevComponents.DotNetBar.Controls.ProgressBarX();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            this.progressBarX3 = new DevComponents.DotNetBar.Controls.ProgressBarX();
-            this.progressBarX4 = new DevComponents.DotNetBar.Controls.ProgressBarX();
-            this.progressBarX5 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.groupPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -124,7 +126,6 @@
             this.comboBoxEx4.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx4.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.comboBoxEx4.TabIndex = 3;
-            this.comboBoxEx4.SelectedIndexChanged += new System.EventHandler(this.comboBoxEx4_SelectedIndexChanged);
             // 
             // backgroundWorker1
             // 
@@ -140,7 +141,7 @@
             // 
             // 
             this.circularProgress1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.circularProgress1.Location = new System.Drawing.Point(140, 4);
+            this.circularProgress1.Location = new System.Drawing.Point(227, 12);
             this.circularProgress1.Name = "circularProgress1";
             this.circularProgress1.Size = new System.Drawing.Size(50, 49);
             this.circularProgress1.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeXP;
@@ -379,6 +380,54 @@
             this.groupPanel1.TabIndex = 18;
             this.groupPanel1.Text = "Seleccione Polizas a Generar";
             // 
+            // progressBarX5
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX5.Location = new System.Drawing.Point(248, 196);
+            this.progressBarX5.Name = "progressBarX5";
+            this.progressBarX5.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX5.TabIndex = 27;
+            this.progressBarX5.Text = "progressBarX5";
+            // 
+            // progressBarX4
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX4.Location = new System.Drawing.Point(248, 150);
+            this.progressBarX4.Name = "progressBarX4";
+            this.progressBarX4.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX4.TabIndex = 26;
+            this.progressBarX4.Text = "progressBarX4";
+            // 
+            // progressBarX3
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX3.Location = new System.Drawing.Point(248, 112);
+            this.progressBarX3.Name = "progressBarX3";
+            this.progressBarX3.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX3.TabIndex = 25;
+            this.progressBarX3.Text = "progressBarX3";
+            // 
+            // progressBarX2
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX2.Location = new System.Drawing.Point(248, 65);
+            this.progressBarX2.Name = "progressBarX2";
+            this.progressBarX2.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX2.TabIndex = 24;
+            this.progressBarX2.Text = "progressBarX2";
+            // 
             // labelX5
             // 
             // 
@@ -520,18 +569,6 @@
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             this.backgroundWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker3_RunWorkerCompleted);
             // 
-            // progressBarX2
-            // 
-            // 
-            // 
-            // 
-            this.progressBarX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX2.Location = new System.Drawing.Point(248, 65);
-            this.progressBarX2.Name = "progressBarX2";
-            this.progressBarX2.Size = new System.Drawing.Size(128, 10);
-            this.progressBarX2.TabIndex = 24;
-            this.progressBarX2.Text = "progressBarX2";
-            // 
             // backgroundWorker4
             // 
             this.backgroundWorker4.WorkerReportsProgress = true;
@@ -540,41 +577,21 @@
             this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
             this.backgroundWorker4.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker4_RunWorkerCompleted);
             // 
-            // progressBarX3
+            // backgroundWorker5
             // 
+            this.backgroundWorker5.WorkerReportsProgress = true;
+            this.backgroundWorker5.WorkerSupportsCancellation = true;
+            this.backgroundWorker5.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker5_DoWork);
+            this.backgroundWorker5.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker5_ProgressChanged);
+            this.backgroundWorker5.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker5_RunWorkerCompleted);
             // 
+            // backgroundWorker6
             // 
-            // 
-            this.progressBarX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX3.Location = new System.Drawing.Point(248, 112);
-            this.progressBarX3.Name = "progressBarX3";
-            this.progressBarX3.Size = new System.Drawing.Size(128, 10);
-            this.progressBarX3.TabIndex = 25;
-            this.progressBarX3.Text = "progressBarX3";
-            // 
-            // progressBarX4
-            // 
-            // 
-            // 
-            // 
-            this.progressBarX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX4.Location = new System.Drawing.Point(248, 150);
-            this.progressBarX4.Name = "progressBarX4";
-            this.progressBarX4.Size = new System.Drawing.Size(128, 10);
-            this.progressBarX4.TabIndex = 26;
-            this.progressBarX4.Text = "progressBarX4";
-            // 
-            // progressBarX5
-            // 
-            // 
-            // 
-            // 
-            this.progressBarX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX5.Location = new System.Drawing.Point(248, 196);
-            this.progressBarX5.Name = "progressBarX5";
-            this.progressBarX5.Size = new System.Drawing.Size(128, 10);
-            this.progressBarX5.TabIndex = 27;
-            this.progressBarX5.Text = "progressBarX5";
+            this.backgroundWorker6.WorkerReportsProgress = true;
+            this.backgroundWorker6.WorkerSupportsCancellation = true;
+            this.backgroundWorker6.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker6_DoWork);
+            this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
+            this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
             // Form1
             // 
@@ -656,6 +673,8 @@
         private DevComponents.DotNetBar.Controls.ProgressBarX progressBarX5;
         private DevComponents.DotNetBar.Controls.ProgressBarX progressBarX4;
         private DevComponents.DotNetBar.Controls.ProgressBarX progressBarX3;
+        private System.ComponentModel.BackgroundWorker backgroundWorker5;
+        private System.ComponentModel.BackgroundWorker backgroundWorker6;
     }
 }
 

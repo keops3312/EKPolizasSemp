@@ -19,7 +19,6 @@ namespace EKPolizasSemp
     public partial class Form1 : Office2007Form
     {
 
-
         #region Properties (proiedades)
         string LOCALIDAD;
         string CUENTA_CAJA;
@@ -40,7 +39,7 @@ namespace EKPolizasSemp
         //
         string año = "";
         string mes = "";
-        int nveces=0;
+        int nveces = 0;
         int dias_en_mes;
         string fecha_inicial;
         string fecha_final;
@@ -54,11 +53,59 @@ namespace EKPolizasSemp
         string server;
         string letra;
         int opcion;
+        DataTable tablecaja_dos = new DataTable();
+
+        #endregion
+      
+        #region Events (eventos)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            circularProgress1.Visible = true;
+            circularProgress1.IsRunning = true;
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void buttonX1_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialogoRuta = new FolderBrowserDialog();
+
+            if (dialogoRuta.ShowDialog() == DialogResult.OK)
+            {
+
+                path = dialogoRuta.SelectedPath;
+                textBoxX1.Text = path;
+
+            }
+        }
+
+        private void comboBoxEx1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            paso2();
+        }
+
+        private void buttonX2_Click(object sender, EventArgs e)
+        {
+            DialogResult pregunta = MessageBox.Show("Generar Polizas?", "EKPolizasSemp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (pregunta == DialogResult.Yes)
+            {
+                //obtener los rangos, fechas de cada mes
+                caja = this.comboBoxEx4.Text;
+                server = this.label4.Text;
+                path = this.textBoxX1.Text;
+
+                mes_calculo();
+
+                crear_poliza();
+
+            }
+        }
+
 
 
         #endregion
 
-        #region Methods (Metodos)
+        #region Methods (metodos)
         public Form1()
         {
             InitializeComponent();
@@ -70,9 +117,195 @@ namespace EKPolizasSemp
             backgroundWorker3.WorkerSupportsCancellation = true;
             backgroundWorker4.WorkerReportsProgress = true;
             backgroundWorker4.WorkerSupportsCancellation = true;
+            backgroundWorker5.WorkerReportsProgress = true;
+            backgroundWorker5.WorkerSupportsCancellation = true;
+            backgroundWorker6.WorkerReportsProgress = true;
+            backgroundWorker6.WorkerSupportsCancellation = true;
         }
 
-        //find place
+        private void crear_poliza()
+        {
+
+
+
+            if (checkBoxX1.Checked == true)
+            {
+                letra = textBoxX3.Text;
+                backgroundWorker2.RunWorkerAsync();
+
+            }
+
+            if (checkBoxX2.Checked == true)
+            {
+                letra = textBoxX2.Text;
+                backgroundWorker3.RunWorkerAsync();
+
+            }
+
+            if (checkBoxX3.Checked == true)
+            {
+                letra = textBoxX4.Text;
+                backgroundWorker4.RunWorkerAsync();
+
+            }
+
+            if (checkBoxX4.Checked == true)
+            {
+                letra = textBoxX5.Text;
+                backgroundWorker5.RunWorkerAsync();
+
+            }
+
+            if (checkBoxX5.Checked == true)
+            {
+                letra = textBoxX6.Text;
+                backgroundWorker6.RunWorkerAsync();
+
+            }
+
+
+
+            #region trash
+            ////Todos los checkbox serán considerados como un item de checkboxlist:
+            //List<CheckBoxX> chkLst = new List<CheckBoxX>();
+
+            ////Añadimos todos los checkboxes al checkboxlist:
+            //chkLst.AddRange(this.groupPanel1.Controls.OfType<CheckBoxX>());
+
+            //for (int i = 0; i < chkLst.Count; i++)
+            //{
+
+            //    if(chkLst[i].Checked==true && chkLst[i].Text == "Prestamos")
+            //    {
+            //        opcion = 1;
+            //        letra = this.textBoxX3.Text;
+            //        backgroundWorker2.RunWorkerAsync();
+            //    }
+
+            //    if (chkLst[i].Checked == true && chkLst[i].Text == "Cobros")
+            //    {
+            //        opcion = 2;
+            //        letra = this.textBoxX2.Text;
+            //        backgroundWorker3.RunWorkerAsync();
+            //    }
+
+            //    if (chkLst[i].Checked == true && chkLst[i].Text == "Diario")
+            //    {
+            //        opcion = 3;
+            //        letra = this.textBoxX4.Text;
+            //        backgroundWorker4.RunWorkerAsync();
+            //    }
+
+
+            //    if (chkLst[i].Checked == true && chkLst[i].Text == "Interes Semanal")
+            //    {
+
+            //    }
+
+            //    if (chkLst[i].Checked == true && chkLst[i].Text == "Remision Semanal")
+            //    {
+
+            //    }
+
+
+            //Hacemos el Deschecked a todos los checkbox:
+            // chkLst[i].Checked = true;
+
+            //Si quisieramos que todos los chekbox estuvieran en checked:
+            //chkLst[i].Checked = true
+
+            //Si quisieramos que todos los chekbox se habilitaran:
+            //chkLst[i].Enabled = true
+
+            //Si quisieramos que todos los chekbox se deshabilitaran:
+            //chkLst[i].Enabled = false
+
+
+            //} 
+            #endregion
+
+        }
+        private void ExisteTabla()
+        {
+
+            SqlConnection conexionmy = new SqlConnection(sqlcnx);
+
+            conexionmy.Open();
+            SqlCommand simbolo = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
+                     " WHERE type='U' AND name='cobros_poliza') " +
+                     " BEGIN " +
+                     " PRINT 'Existe'" +
+                     " END " +
+                     " ELSE " +
+                     " BEGIN " +
+                     " CREATE TABLE[dbo].[cobros_poliza](" +
+                     "[no][int] IDENTITY(1, 1) NOT NULL," +
+                     "[cuenta][nvarchar](255) NULL," +
+                     "[caja][nvarchar](255) NULL," +
+                     "[fecha][smalldatetime] NULL" +
+                     ") ON[PRIMARY]" +
+                     "END", conexionmy);
+            simbolo.ExecuteNonQuery();
+            conexionmy.Close();
+
+            conexionmy.Open();
+            SqlCommand simbolo2 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
+                     "WHERE type = 'U' AND name = 'diario_poliza' )" +
+                     " BEGIN " +
+                     "PRINT 'Existe'" +
+                     " END " +
+                     " ELSE " +
+                     " BEGIN " +
+                     " CREATE TABLE[dbo].[diario_poliza](" +
+                     "[no][int] IDENTITY(1, 1) NOT NULL," +
+                     "[cuenta][nvarchar](255) NULL," +
+                     "[caja][nvarchar](255) NULL," +
+                     "[fecha][smalldatetime] NULL" +
+                     ") ON[PRIMARY]" +
+                     "END", conexionmy);
+            simbolo2.ExecuteNonQuery();
+            conexionmy.Close();
+
+            conexionmy.Open();
+            SqlCommand simbolo3 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
+                     "WHERE type = 'U' AND name = 'interesSemanal_poliza') " +
+                     " BEGIN " +
+                     "PRINT 'Existe'" +
+                     " END " +
+                     " ELSE " +
+                     " BEGIN " +
+                     " CREATE TABLE[dbo].[interesSemanal_poliza](" +
+                     "[no][int] IDENTITY(1, 1) NOT NULL," +
+                     "[cuenta][nvarchar](255) NULL," +
+                     "[caja][nvarchar](255) NULL," +
+                     "[fecha][smalldatetime] NULL" +
+                     ") ON[PRIMARY]" +
+                     "END", conexionmy);
+            simbolo3.ExecuteNonQuery();
+            conexionmy.Close();
+
+            conexionmy.Open();
+            SqlCommand simbolo4 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
+                     "WHERE type = 'U' AND name = 'remisionSemanal_poliza' )" +
+                     " BEGIN " +
+                     "PRINT 'Existe'" +
+                     " END " +
+                     " ELSE " +
+                     " BEGIN " +
+                     " CREATE TABLE[dbo].[remisionSemanal_poliza](" +
+                     "[no][int] IDENTITY(1, 1) NOT NULL," +
+                     "[cuenta][nvarchar](255) NULL," +
+                     "[caja][nvarchar](255) NULL," +
+                     "[fecha][smalldatetime] NULL" +
+                     ") ON[PRIMARY]" +
+                     "END", conexionmy);
+            simbolo4.ExecuteNonQuery();
+            conexionmy.Close();
+
+
+
+        }
+     
         private void paso2()
         {
 
@@ -96,8 +329,8 @@ namespace EKPolizasSemp
 
 
                 //2. cargo las cajas de la sucursal seleccionada
+                tablecaja_dos.Clear();
 
-                DataTable tablecaja_dos = new DataTable();
                 SqlDataAdapter datoscaja = new SqlDataAdapter("USE " + this.label4.Text + " " +
                     " Select NumCaja from selcaja order by NumCaja asc", conexionmy);
                 datoscaja.Fill(tablecaja_dos);
@@ -106,9 +339,9 @@ namespace EKPolizasSemp
                 comboBoxEx4.DataSource = tablecaja_dos;
 
 
-                this.dataGridView5.DataSource = tablecaja_dos;
+                //this.dataGridView5.DataSource = tablecaja_dos;
 
-
+                ExisteTabla();
 
             }
             catch (Exception ex)
@@ -117,10 +350,9 @@ namespace EKPolizasSemp
             }
 
 
-         
+
         }
 
-        //Fill Comboboxes
         private void combos()
         {
             this.comboBoxEx1.AutoCompleteSource = AutoCompleteSource.ListItems;
@@ -161,9 +393,11 @@ namespace EKPolizasSemp
             comboBoxEx1.ValueMember = "Nombre Sucursal";
             comboBoxEx1.DisplayMember = "Nombre Sucursal";
             comboBoxEx1.DataSource = tablasql;
+
+
+           
         }
-    
-        //conexion de generador de polizas
+      
         private void conexion()
         {
             //aligual que las demas aplicaciones cargaremos nuestra llave al servidor de oficinas para la conexion directa
@@ -175,14 +409,14 @@ namespace EKPolizasSemp
                 string lineB = sr1.ReadLine();
                 string lineC = sr1.ReadLine();
                 string lineF = sr1.ReadLine();
-                
+
                 //ahroa desecrypto la informacion             
                 a = Encriptar_Desencriptar.DecryptKeyMD5(lineA);
                 b = Encriptar_Desencriptar.DecryptKeyMD5(lineB);
-                c = Encriptar_Desencriptar.DecryptKeyMD5(lineC);  
+                c = Encriptar_Desencriptar.DecryptKeyMD5(lineC);
                 f = Encriptar_Desencriptar.DecryptKeyMD5(lineF);
                 //ahora realizo la conexion par amostrar las sucursales
-             
+
                 try
                 {
 
@@ -201,7 +435,7 @@ namespace EKPolizasSemp
                     }
                     else
                     {
-                        MessageBox.Show("Error de Conexion","Polizas Semp",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Error de Conexion", "Polizas Semp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
                 }
@@ -218,7 +452,7 @@ namespace EKPolizasSemp
             }
 
         }
-        //Range Dates
+       
         private void mes_calculo()
         {
             //1obtener la fecha inicial
@@ -290,112 +524,6 @@ namespace EKPolizasSemp
 
         }
 
-        #endregion
-
-        #region Events (eventos)
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            circularProgress1.Visible = true;
-            circularProgress1.IsRunning = true;
-            backgroundWorker1.RunWorkerAsync();
-        }
-
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            conexion();
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            circularProgress1.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            circularProgress1.Visible = false;
-            circularProgress1.IsRunning = false;
-            combos();
-        }
-
-        private void buttonX2_Click(object sender, EventArgs e)
-        {
-            DialogResult pregunta = MessageBox.Show("Generar Polizas?", "EKPolizasSemp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (pregunta == DialogResult.Yes)
-            {
-                //obtener los rangos, fechas de cada mes
-                caja = this.comboBoxEx4.Text;
-                server = this.label4.Text;
-                path = this.textBoxX1.Text;
-
-                mes_calculo();
-             
-                crear_poliza();
-                
-            }
-        }
-
-        private void crear_poliza()
-        {
-            //Todos los checkbox serán considerados como un item de checkboxlist:
-            List<CheckBoxX> chkLst = new List<CheckBoxX>();
-
-            //Añadimos todos los checkboxes al checkboxlist:
-            chkLst.AddRange(this.groupPanel1.Controls.OfType<CheckBoxX>());
-
-            for (int i = 0; i < chkLst.Count; i++)
-            {
-
-                if(chkLst[i].Checked==true && chkLst[i].Text == "Prestamos")
-                {
-                    opcion = 1;
-                    letra = this.textBoxX3.Text;
-                    backgroundWorker2.RunWorkerAsync();
-                }
-
-                if (chkLst[i].Checked == true && chkLst[i].Text == "Cobros")
-                {
-                    opcion = 2;
-                    letra = this.textBoxX2.Text;
-                    backgroundWorker3.RunWorkerAsync();
-                }
-
-                if (chkLst[i].Checked == true && chkLst[i].Text == "Diario")
-                {
-                    opcion = 3;
-                    letra = this.textBoxX4.Text;
-                    backgroundWorker4.RunWorkerAsync();
-                }
-
-
-                if (chkLst[i].Checked == true && chkLst[i].Text == "Interes Semanal")
-                {
-                   
-                }
-
-                if (chkLst[i].Checked == true && chkLst[i].Text == "Remision Semanal")
-                {
-                 
-                }
-
-
-                //Hacemos el Deschecked a todos los checkbox:
-                // chkLst[i].Checked = true;
-
-                //Si quisieramos que todos los chekbox estuvieran en checked:
-                //chkLst[i].Checked = true
-
-                //Si quisieramos que todos los chekbox se habilitaran:
-                //chkLst[i].Enabled = true
-
-                //Si quisieramos que todos los chekbox se deshabilitaran:
-                //chkLst[i].Enabled = false
-
-
-            }
-
-        }
-
-
         #region Prestamos rutina
         private void prestamos()
         {
@@ -453,6 +581,7 @@ namespace EKPolizasSemp
                 }//for 
 
 
+
             }//try
             catch (Exception ex)
             {
@@ -466,8 +595,12 @@ namespace EKPolizasSemp
         {
 
 
+
             SqlConnection conexionmy = new SqlConnection();
             conexionmy.ConnectionString = sqlcnx;//conexion mysql
+
+
+
 
 
             fecha_tres = año;
@@ -628,8 +761,6 @@ namespace EKPolizasSemp
 
         #endregion
 
-
-
         #region Cobros rutina
         public void cobros()
         {
@@ -638,54 +769,54 @@ namespace EKPolizasSemp
 
                 //2. cargo las cajas de la sucursal seleccionada
                 SqlConnection conexionmy = new SqlConnection(sqlcnx);
-               
+
                 progressBarX2.Maximum = dias_en_mes;
                 progressBarX2.Value = 0;
                 //string CONTRATO, STATUS, PRESTAMO;
                 for (int nveces = 1; nveces <= dias_en_mes; nveces++)
-                    {
+                {
                     backgroundWorker3.ReportProgress(nveces);
 
                     fecha_cinco = Convert.ToString(nveces);
-                        if (fecha_cinco.Length == 1)
-                        {
-                            fecha_cinco = "0" + fecha_cinco;
-                        }
-                        fecha_uno = año + "-" + mes + "-" + fecha_cinco;
-                        fecha_dos = fecha_cinco + "/" + mes + "/" + año;
+                    if (fecha_cinco.Length == 1)
+                    {
+                        fecha_cinco = "0" + fecha_cinco;
+                    }
+                    fecha_uno = año + "-" + mes + "-" + fecha_cinco;
+                    fecha_dos = fecha_cinco + "/" + mes + "/" + año;
 
-                        conexionmy.Open();
-                        SqlCommand comando_crea = new SqlCommand("USE " + server +
-                        " truncate table prestamos_poliza " +
-                        " ", conexionmy);
-                        comando_crea.ExecuteNonQuery();
-                        conexionmy.Close();
-                        //MessageBox.Show("" + fecha_cinco);
-                        conexionmy.Open();
-                        SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + letra + "')", conexionmy);
-                        simbolo.ExecuteNonQuery();
-                        conexionmy.Close();
+                    conexionmy.Open();
+                    SqlCommand comando_crea = new SqlCommand("USE " + server +
+                    " truncate table cobros_poliza " +
+                    " ", conexionmy);
+                    comando_crea.ExecuteNonQuery();
+                    conexionmy.Close();
+                    //MessageBox.Show("" + fecha_cinco);
+                    conexionmy.Open();
+                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + letra + "')", conexionmy);
+                    simbolo.ExecuteNonQuery();
+                    conexionmy.Close();
 
-                        conexionmy.Open();
-                        SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);
-                        diadepoliza.ExecuteNonQuery();
-                        conexionmy.Close();
+                    conexionmy.Open();
+                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);
+                    diadepoliza.ExecuteNonQuery();
+                    conexionmy.Close();
 
-                        conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
-                        leyendaP.ExecuteNonQuery();
-                        conexionmy.Close();
+                    conexionmy.Open();
+                    SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                    leyendaP.ExecuteNonQuery();
+                    conexionmy.Close();
 
-                        conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
-                        leyendaPL.ExecuteNonQuery();
-                        conexionmy.Close();
+                    conexionmy.Open();
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                    leyendaPL.ExecuteNonQuery();
+                    conexionmy.Close();
 
-                        poliza_cobro();
-                    }//for 
+                    poliza_cobro();
+                }//for 
 
-                
-             
+
+
 
             }//try
             catch (Exception ex)
@@ -765,12 +896,12 @@ namespace EKPolizasSemp
 
                     //NUMERO DE LA CUENTA
                     conexionmy.Open();
-                    SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + CUENTA_CAJA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                    SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + CUENTA_CAJA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                     comando_A.ExecuteNonQuery();
                     conexionmy.Close();
                     //LAS LEYENDAS
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
@@ -784,14 +915,14 @@ namespace EKPolizasSemp
                     if (STATUS == "CANCELADO")
                     {
                         conexionmy.Open();
-                        SqlCommand comando_C = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_C = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
                         comando_C.ExecuteNonQuery();
                         conexionmy.Close();
                     }
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + monto_valor + ",1.00" + "')", conexionmy);
                         comando_D.ExecuteNonQuery();
                         conexionmy.Close();
                     }
@@ -804,7 +935,7 @@ namespace EKPolizasSemp
                    " SELECT fechacons, prestamo FROM  contratos where contrato='" + CONTRATO + "' " +
                    "", conexionmy);
                     fecha_Carga.Fill(fecha_con);
-                   // this.dataGridView2.DataSource = fecha_con;
+                    // this.dataGridView2.DataSource = fecha_con;
                     if (fecha_con.Rows.Count == 0)
                     {
                         //exportar con nota de no hubo operacion este dia y seguir con rutina
@@ -852,18 +983,18 @@ namespace EKPolizasSemp
 
                     //AHORA LA CUENTA DE LA CAJA
                     conexionmy.Open();
-                    SqlCommand comando_E = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + quince + "                ," + "  " + DEPARTAMENTO + " ')", conexionmy);
+                    SqlCommand comando_E = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + quince + "                ," + "  " + DEPARTAMENTO + " ')", conexionmy);
                     comando_E.ExecuteNonQuery();
                     conexionmy.Close();
                     //ahora leyenda caja
                     conexionmy.Open();
-                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
                     comando_F.ExecuteNonQuery();
                     conexionmy.Close();
                     //inserto espacio
                     //ahora la el monto de prestamo
                     conexionmy.Open();
-                    SqlCommand comando_G = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('')", conexionmy);
+                    SqlCommand comando_G = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('')", conexionmy);
                     comando_G.ExecuteNonQuery();
                     conexionmy.Close();
                     //nuevamene la cantidad
@@ -879,33 +1010,33 @@ namespace EKPolizasSemp
                     if (STATUS == "CANCELADO")
                     {
                         conexionmy.Open();
-                        SqlCommand comando_H = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_H = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
                         comando_H.ExecuteNonQuery();
                         conexionmy.Close();
                     }
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand comando_I = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + valor_convertido + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_I = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + valor_convertido + ",1.00" + "')", conexionmy);
                         comando_I.ExecuteNonQuery();
                         conexionmy.Close();
                     }
                     //'ahora cuenta caja
                     conexionmy.Open();
-                    SqlCommand comando_Ia = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                    SqlCommand comando_Ia = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                     comando_Ia.ExecuteNonQuery();
                     conexionmy.Close();
 
                     //ahora leyenda interes
                     conexionmy.Open();
-                    SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
                     comando_Iaa.ExecuteNonQuery();
                     conexionmy.Close();
 
 
                     //un nuevo espacio
                     conexionmy.Open();
-                    SqlCommand comando_Iaabk = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta) VALUES(' ')", conexionmy);
+                    SqlCommand comando_Iaabk = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta) VALUES(' ')", conexionmy);
                     comando_Iaabk.ExecuteNonQuery();
                     conexionmy.Close();
                     //ingreso del interes    
@@ -920,31 +1051,31 @@ namespace EKPolizasSemp
                     if (STATUS == "CANCELADO")
                     {
                         conexionmy.Open();
-                        SqlCommand comando_Ha = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_Ha = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
                         comando_Ha.ExecuteNonQuery();
                         conexionmy.Close();
                     }
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand comando_Iz = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + valor_convertido3 + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_Iz = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + valor_convertido3 + ",1.00" + "')", conexionmy);
                         comando_Iz.ExecuteNonQuery();
                         conexionmy.Close();
                     }
 
                     //'ahora la cuenta del iva
                     conexionmy.Open();
-                    SqlCommand comando_Iza = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta) VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                    SqlCommand comando_Iza = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                     comando_Iza.ExecuteNonQuery();
                     conexionmy.Close();
                     //leyenda iva
                     conexionmy.Open();
-                    SqlCommand comando_Iaabe = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta) VALUES('" + "IVA- " + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_Iaabe = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "IVA- " + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
                     comando_Iaabe.ExecuteNonQuery();
                     conexionmy.Close();
                     //un nuevo espacio
                     conexionmy.Open();
-                    SqlCommand comando_Iaaba = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta)VALUES(' ')", conexionmy);
+                    SqlCommand comando_Iaaba = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta)VALUES(' ')", conexionmy);
                     comando_Iaaba.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -960,14 +1091,14 @@ namespace EKPolizasSemp
                     if (STATUS == "CANCELADO")
                     {
                         conexionmy.Open();
-                        SqlCommand comando_Ha = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_Ha = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "0.01" + ",1.00" + "')", conexionmy);
                         comando_Ha.ExecuteNonQuery();
                         conexionmy.Close();
                     }
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand comando_Iz = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + valor_convertido35 + ",1.00" + "')", conexionmy);
+                        SqlCommand comando_Iz = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + valor_convertido35 + ",1.00" + "')", conexionmy);
                         comando_Iz.ExecuteNonQuery();
                         conexionmy.Close();
                     }
@@ -975,7 +1106,7 @@ namespace EKPolizasSemp
                     //
                 }//cierre del ciclo for each
                 conexionmy.Open();
-                SqlCommand comando_J = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('FIN')", conexionmy);
+                SqlCommand comando_J = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('FIN')", conexionmy);
                 comando_J.ExecuteNonQuery();
                 conexionmy.Close();
                 notas_cobro();
@@ -989,7 +1120,7 @@ namespace EKPolizasSemp
             DataTable tablaprestamos = new DataTable();
             tablaprestamos.Clear();
             SqlDataAdapter datos_presa = new SqlDataAdapter("USE " + server + "  " +
-                "SELECT * FROM  prestamos_poliza " +
+                "SELECT * FROM  cobros_poliza " +
                 " order by  no asc " +
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
@@ -1002,7 +1133,6 @@ namespace EKPolizasSemp
         }
         #endregion
 
-
         #region Interes Diario
         public void diario_interes()
         {
@@ -1010,78 +1140,78 @@ namespace EKPolizasSemp
             {
                 //if (checkBoxX3.Checked == true)
                 //{
-                    //2. cargo las cajas de la sucursal seleccionada
-                    SqlConnection conexionmy = new SqlConnection(sqlcnx);
+                //2. cargo las cajas de la sucursal seleccionada
+                SqlConnection conexionmy = new SqlConnection(sqlcnx);
                 // conexionmy.ConnectionString = sqlcnx;//conexion mysql
 
                 progressBarX3.Maximum = dias_en_mes;
                 progressBarX3.Value = 0;
                 //string CONTRATO, STATUS, PRESTAMO;
                 for (int nveces = 1; nveces <= dias_en_mes; nveces++)
-                    {
+                {
 
                     backgroundWorker4.ReportProgress(nveces);
 
                     fecha_cinco = Convert.ToString(nveces);
-                        if (fecha_cinco.Length == 1)
-                        {
-                            fecha_cinco = "0" + fecha_cinco;
-                        }
-                        fecha_uno = año + "-" + mes + "-" + fecha_cinco;
-                        fecha_dos = fecha_cinco + "/" + mes + "/" + año;
+                    if (fecha_cinco.Length == 1)
+                    {
+                        fecha_cinco = "0" + fecha_cinco;
+                    }
+                    fecha_uno = año + "-" + mes + "-" + fecha_cinco;
+                    fecha_dos = fecha_cinco + "/" + mes + "/" + año;
 
+                    conexionmy.Open();
+                    SqlCommand comando_crea = new SqlCommand("USE " + server +
+                    " truncate table diario_poliza " +
+                    " ", conexionmy);
+                    comando_crea.ExecuteNonQuery();
+                    conexionmy.Close();
+                    //MessageBox.Show("" + fecha_cinco);
+                    conexionmy.Open();
+                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + letra + "')", conexionmy);//letra
+                    simbolo.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    conexionmy.Open();
+                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
+                    diadepoliza.ExecuteNonQuery();
+                    conexionmy.Close();
+                    ////este es diferente con iff segn la empresa
+                    //LAS LEYENDAS con if segun empr
+                    if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
+                    {
                         conexionmy.Open();
-                        SqlCommand comando_crea = new SqlCommand("USE " + server +
-                        " truncate table prestamos_poliza " +
-                        " ", conexionmy);
-                        comando_crea.ExecuteNonQuery();
-                        conexionmy.Close();
-                        //MessageBox.Show("" + fecha_cinco);
-                        conexionmy.Open();
-                        SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + letra + "')", conexionmy);//letra
-                        simbolo.ExecuteNonQuery();
-                        conexionmy.Close();
-
-                        conexionmy.Open();
-                        SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
-                        diadepoliza.ExecuteNonQuery();
-                        conexionmy.Close();
-                        ////este es diferente con iff segn la empresa
-                        //LAS LEYENDAS con if segun empr
-                        if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
-                        {
-                            conexionmy.Open();
-                            SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
-                            leyendaP.ExecuteNonQuery();
-                            conexionmy.Close();
-
-                        }
-                        else if (empresa_Conta == "MONTE ROS SA DE CV")
-                        {
-                            conexionmy.Open();
-                            SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
-                            leyendaP.ExecuteNonQuery();
-                            conexionmy.Close();
-
-                        }
-                        else
-                        {
-                            conexionmy.Open();
-                            SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
-                            leyendaP.ExecuteNonQuery();
-                            conexionmy.Close();
-
-                        }
-
-                        conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('.')", conexionmy);
-                        leyendaPL.ExecuteNonQuery();
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                        leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
-                        poliza_diario();
-                    }//for 
+                    }
+                    else if (empresa_Conta == "MONTE ROS SA DE CV")
+                    {
+                        conexionmy.Open();
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        leyendaP.ExecuteNonQuery();
+                        conexionmy.Close();
 
-                    //MessageBox.Show("Polizas de diario realizadas", "Polizas SEMP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        conexionmy.Open();
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                        leyendaP.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                    }
+
+                    conexionmy.Open();
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('.')", conexionmy);
+                    leyendaPL.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    poliza_diario();
+                }//for 
+
+                //MessageBox.Show("Polizas de diario realizadas", "Polizas SEMP", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //}//if
                 //else
                 //{
@@ -1091,7 +1221,7 @@ namespace EKPolizasSemp
             }//try
             catch (Exception ex)
             {
-                 MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -1147,7 +1277,7 @@ namespace EKPolizasSemp
             //string letra = "DESEMP";
             DataTable tablacobros = new DataTable();
             tablacobros.Clear();
-            SqlDataAdapter comando_carga = new SqlDataAdapter("USE " +server+
+            SqlDataAdapter comando_carga = new SqlDataAdapter("USE " + server +
            "  SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + caja + " ON facturas.factura = " + caja + ".folio " +
             " AND facturas.STATUS = 'VALIDO'  WHERE facturas.FechaFact= '" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' " +
             " and " + caja + ".concepto like '%DESEMP%'" +
@@ -1169,7 +1299,7 @@ namespace EKPolizasSemp
 
 
                 importe_del_iva = tablacobros.Rows[0][0].ToString();// tablacobros.Rows[0].ItemArray[0].ToString();//contrato
-                iva_solo =tablacobros.Rows[0][1].ToString();// tablacobros.Rows[0].ItemArray[1].ToString();//status
+                iva_solo = tablacobros.Rows[0][1].ToString();// tablacobros.Rows[0].ItemArray[1].ToString();//status
 
                 if (importe_del_iva == "")
                 {
@@ -1182,7 +1312,7 @@ namespace EKPolizasSemp
 
                 //NUMERO DE LA CUENTA
                 conexionmy.Open();
-                SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT into prestamos_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT into diario_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                 comando_A.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1191,21 +1321,21 @@ namespace EKPolizasSemp
                 if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                 }
                 else if (empresa_Conta == "MONTE ROS SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                 }
                 else
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                 }
@@ -1220,12 +1350,12 @@ namespace EKPolizasSemp
 
 
                 conexionmy.Open();
-                SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor_T + ",1.00" + "')", conexionmy);
+                SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + monto_valor_T + ",1.00" + "')", conexionmy);
                 comando_D.ExecuteNonQuery();
                 conexionmy.Close();
 
                 conexionmy.Open();
-                SqlCommand comando_D_D = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                SqlCommand comando_D_D = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                 comando_D_D.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1233,28 +1363,28 @@ namespace EKPolizasSemp
                 if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
                     comando_B_b.ExecuteNonQuery();
                     conexionmy.Close();
                 }
                 else if (empresa_Conta == "MONTE ROS SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_B_b.ExecuteNonQuery();
                     conexionmy.Close();
                 }
                 else
                 {
                     conexionmy.Open();
-                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_B_b = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_B_b.ExecuteNonQuery();
                     conexionmy.Close();
                 }
 
 
                 conexionmy.Open();
-                SqlCommand comando_B_e = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES(' ')", conexionmy);
+                SqlCommand comando_B_e = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES(' ')", conexionmy);
                 comando_B_e.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1266,12 +1396,12 @@ namespace EKPolizasSemp
                 monto_valor_G = string.Format("{0:0.000000}", unosidebe);
 
                 conexionmy.Open();
-                SqlCommand comando_D_H = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor_G + ",1.00" + "')", conexionmy);
+                SqlCommand comando_D_H = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + monto_valor_G + ",1.00" + "')", conexionmy);
                 comando_D_H.ExecuteNonQuery();
                 conexionmy.Close();
 
                 conexionmy.Open();
-                SqlCommand comando_D_R = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                SqlCommand comando_D_R = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                 comando_D_R.ExecuteNonQuery();
                 conexionmy.Close();
                 //if segun la empresa
@@ -1279,7 +1409,7 @@ namespace EKPolizasSemp
                 if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
                     comando_D_S.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1287,7 +1417,7 @@ namespace EKPolizasSemp
                 else if (empresa_Conta == "MONTE ROS SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_D_S.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1295,7 +1425,7 @@ namespace EKPolizasSemp
                 else
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_D_S = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_D_S.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1314,12 +1444,12 @@ namespace EKPolizasSemp
 
 
                 conexionmy.Open();
-                SqlCommand comando_D_S_R = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor_GG + ",1.00" + "')", conexionmy);
+                SqlCommand comando_D_S_R = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + monto_valor_GG + ",1.00" + "')", conexionmy);
                 comando_D_S_R.ExecuteNonQuery();
                 conexionmy.Close();
 
                 conexionmy.Open();
-                SqlCommand comando_D_S_Ru = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                SqlCommand comando_D_S_Ru = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                 comando_D_S_Ru.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1328,7 +1458,7 @@ namespace EKPolizasSemp
                 if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
                     comando_D_Sw.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1336,7 +1466,7 @@ namespace EKPolizasSemp
                 else if (empresa_Conta == "MONTE ROS SA DE CV")
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_D_Sw.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1344,13 +1474,13 @@ namespace EKPolizasSemp
                 else
                 {
                     conexionmy.Open();
-                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand comando_D_Sw = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Notas de Pago " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_D_Sw.ExecuteNonQuery();
                     conexionmy.Close();
 
                 }
                 conexionmy.Open();
-                SqlCommand comando_D_S_F = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES(' ')", conexionmy);
+                SqlCommand comando_D_S_F = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES(' ')", conexionmy);
                 comando_D_S_F.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1361,12 +1491,12 @@ namespace EKPolizasSemp
                 monto_valor_GGe = string.Format("{0:0.000000}", unosidebede);
 
                 conexionmy.Open();
-                SqlCommand comando_D_S_Ra = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor_GGe + ",1.00" + "')", conexionmy);
+                SqlCommand comando_D_S_Ra = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + monto_valor_GGe + ",1.00" + "')", conexionmy);
                 comando_D_S_Ra.ExecuteNonQuery();
                 conexionmy.Close();
 
                 conexionmy.Open();
-                SqlCommand comando_D_S_Fi = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('FIN')", conexionmy);
+                SqlCommand comando_D_S_Fi = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('FIN')", conexionmy);
                 comando_D_S_Fi.ExecuteNonQuery();
                 conexionmy.Close();
                 notas_diario();
@@ -1380,7 +1510,7 @@ namespace EKPolizasSemp
             DataTable tablaprestamos = new DataTable();
             tablaprestamos.Clear();
             SqlDataAdapter datos_presa = new SqlDataAdapter("USE " + server + "  " +
-                "SELECT * FROM  prestamos_poliza " +
+                "SELECT * FROM  diario_poliza " +
                 " order by  no asc " +
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
@@ -1392,10 +1522,1152 @@ namespace EKPolizasSemp
         }
 
 
-       
+
+        #endregion
+
+        #region Interes Semanal
+
+        public void semanal_interes()
+        {
+
+            poliza_interes_semanal();
+
+        }
+
+        public void poliza_interes_semanal()
+        {
+            try
+            {
+                // int dia_en_mes_ret;
+                int mes_configurado;
+                int total_dias;
+                string primer_fecha;
+                string segunda_fecha;
+                int contador = 1;
+                string que_dia_es;
+                int suma = 0;
+                int resta = 0;
+
+                DateTime fecha_lunes;
+                DateTime fecha_domingo;
+                DateTime fecha_dia_final;
+                DateTime fecha_dia_inicial;
+                //mes
+                //año
+                total_dias = DateTime.DaysInMonth(Convert.ToInt32(año), Convert.ToInt32(mes));
+                mes_configurado = Convert.ToInt32(mes);
+                fecha_dia_final = Convert.ToDateTime(año + "-" + mes + "-" + total_dias);
+                fecha_dia_inicial = Convert.ToDateTime(año + "-" + mes + "-" + "01");
+                string mi_Caja;
+                string total_fact = "0";
+                string total_iva_fact = "0";
+                //2. cargo las cajas de la sucursal seleccionada
+                progressBarX4.Maximum = dias_en_mes;
+                progressBarX4.Value = 0;
+
+                //primer_fecha = año + "-" + mes + "-" + "01";//primer fecha
+                //segunda_fecha = año + "-" + mes + "-" + "01";//primer fecha
+                while (contador <= total_dias)//segun el numero de dias del mes
+                {
+                    backgroundWorker5.ReportProgress(total_dias);
+
+                    fecha_cinco = Convert.ToString(contador);
+                    if (fecha_cinco.Length == 1)
+                    {
+                        fecha_cinco = "0" + fecha_cinco;
+                    }
+
+                    SqlConnection conexionmy = new SqlConnection(sqlcnx);
+                    //conexionmy.ConnectionString = sqlcnx;//conexion mysql
+
+                    conexionmy.Open();
+                    SqlCommand comando_crea = new SqlCommand("USE " + server +
+                    " truncate table interesSemanal_poliza " +
+                    " ", conexionmy);
+                    comando_crea.ExecuteNonQuery();
+                    conexionmy.Close();
+                    //MessageBox.Show("" + fecha_cinco);
+                    conexionmy.Open();
+                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + letra + "')", conexionmy);//letra
+                    simbolo.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    conexionmy.Open();
+                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
+                    diadepoliza.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    conexionmy.Open();
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "' )", conexionmy);//dia
+                    diadepolizas.ExecuteNonQuery();
+                    conexionmy.Close();
+
+
+                    conexionmy.Open();
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                    leyendaPL.ExecuteNonQuery();
+                    conexionmy.Close();
+                    ////este es diferente con iff segn la empresa
+
+                    //obtengo la primer fecha
+                    primer_fecha = año + "-" + mes + "-" + contador;
+                    segunda_fecha = año + "-" + mes + "-" + contador;
+                    //obtengo el dia lunes
+                    que_dia_es = Convert.ToDateTime(primer_fecha).DayOfWeek.ToString("d");
+                    //verifico que dias
+
+                    if (Convert.ToInt32(que_dia_es) == 1)//es lunes?
+                    {
+                        //inicio = 1;//no voy a restar
+
+                        //ahora mis inicios
+                        fecha_lunes = DateTime.Parse(primer_fecha);
+                    }
+                    else
+                    {
+                        //ahora mis inicios
+                        resta = Convert.ToInt32(que_dia_es) - 1;//dias que restare para llegar al lunes
+                        fecha_lunes = DateTime.Parse(primer_fecha).AddDays(-resta);
+                    }
+
+                    ////y aqui empieza la primer compracion saber si aun estoy en el mes que corresponde de dia lunes
+                    int MES_INICIO = fecha_lunes.Month;
+                    // MessageBox.Show("me inicio" + MES_INICIO + "" + mes_configurado);
+                    if (MES_INICIO == mes_configurado && Convert.ToInt32(Convert.ToDateTime(fecha_lunes).DayOfWeek.ToString("d")) == 1)//si mes inicio es igual a mes operativo
+                    {
+                        //no hago nada y se que si esta el lunes en ese dia de la semna
+                    }
+                    else
+                    {
+                        fecha_lunes = fecha_lunes.AddDays(1);
+                    }
+                    if (fecha_lunes.Month < mes_configurado)
+                    {
+                        fecha_lunes = fecha_dia_inicial;
+                    }
+
+                    //domingo
+                    if (Convert.ToInt32(que_dia_es) == 0)//si es domingo
+                    {
+                        fecha_domingo = DateTime.Parse(segunda_fecha);
+                    }
+                    else
+                    {
+                        suma = 7 - Convert.ToInt32(que_dia_es);//seran dias que sumare para llegar a domindngo
+                        fecha_domingo = DateTime.Parse(segunda_fecha).AddDays(suma);
+                    }
+                    int MES_FINAL = fecha_domingo.Month;
+                    if (MES_FINAL == mes_configurado && Convert.ToInt32(Convert.ToDateTime(fecha_domingo).DayOfWeek.ToString("d")) == 0 && fecha_domingo > fecha_lunes)//si mes inicio es igual a mes operativo
+                    {
+                        //no hago nada y se que si esta el lunes en ese dia de la semna
+                    }
+                    else
+                    {
+                        fecha_domingo = fecha_domingo.AddDays(suma);
+                    }
+                    if (fecha_domingo == fecha_lunes) //se entiende que domingo es igual a 7 y entonces sumo
+                    {
+                        fecha_domingo = fecha_domingo.AddDays(6);
+
+                    }
+                    if (fecha_domingo.Month > mes_configurado)
+                    {
+                        fecha_domingo = fecha_dia_final;
+                    }
+
+
+
+                    switch (mes)
+                    {
+                        case "01":
+                            mes_letra = "Enero";
+                            break;
+                        case "02":
+                            mes_letra = "Febrero";
+                            break;
+                        case "03":
+                            mes_letra = "Marzo";
+                            break;
+                        case "04":
+                            mes_letra = "Abril";
+                            break;
+                        case "05":
+                            mes_letra = "Mayo";
+                            break;
+                        case "06":
+                            mes_letra = "Junio";
+                            break;
+                        case "07":
+                            mes_letra = "Julio";
+                            break;
+                        case "08":
+                            mes_letra = "Agosto";
+                            break;
+                        case "09":
+                            mes_letra = "Septiembre";
+                            break;
+                        case "10":
+                            mes_letra = "Octubre";
+                            break;
+                        case "11":
+                            mes_letra = "Noviembre";
+                            break;
+                        case "12":
+                            mes_letra = "Diciembre";
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                    foreach (DataRow dr in tablecaja_dos.Rows)
+                    {
+
+                        mi_Caja = dr[0].ToString();//contrato
+
+                        DataTable tablasql = new DataTable();
+                        SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                            "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                            "", conexionmy);
+                        datosSql.Fill(tablasql);
+                        LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
+                        CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
+                        CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
+                        CUENTA_IVA = tablasql.Rows[0].ItemArray[8].ToString();
+                        NUMERO_DE_CAJA = tablasql.Rows[0].ItemArray[3].ToString();
+                        DEPARTAMENTO = tablasql.Rows[0].ItemArray[9].ToString();
+                        CUENTA_PRESTAMOS = tablasql.Rows[0].ItemArray[5].ToString();
+                        TABLA_CAJA = tablasql.Rows[0].ItemArray[11].ToString();
+
+                        //string letra = "DESEMP";
+                        DataTable tablacobros_Y = new DataTable();
+                        tablacobros_Y.Clear();
+                        //  MessageBox.Show("" + fecha_lunes.ToString("yyyy-MM-dd 00:00:00") +
+                        // fecha_domingo.ToString("yyyy-MM-dd 00:00:00") );
+                        //MessageBox.Show("" + mi_Caja);
+                        SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
+                        " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + mi_Caja + " " +
+                        " ON facturas.factura = " + mi_Caja + ".folio AND facturas.STATUS = 'VALIDO'  WHERE " +
+                        " facturas.FechaFact BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' and " +
+                        " '" + fecha_domingo.ToString("dd-MM-yyyy") + "' AND " + mi_Caja + ".concepto like '%DESEMP%'  " +
+                       "", conexionmy);
+                        tablacobros_Y.Clear();
+
+                        //comienza el if de lleno o vacio
+                        comando_carga_Y.Fill(tablacobros_Y);
+                       // this.dataGridView1.DataSource = tablacobros_Y;
+                        //veo si esta vacio el dia
+                        if (tablacobros_Y.Rows.Count == 0)
+                        {
+
+                            //exportar con nota de no hubo operacion este dia y seguir con rutina
+                        }
+                        else
+                        {
+
+                            string importe_del_iva, iva_solo;
+
+
+
+                            importe_del_iva = tablacobros_Y.Rows[0][0].ToString();//this.dataGridView1.Rows[0].ItemArray[0].ToString();//contrato
+                            iva_solo = tablacobros_Y.Rows[0][1].ToString(); //tablacobros_Y.Rows[0].ItemArray[1].ToString();//status
+
+                            if (importe_del_iva == "")
+                            {
+                                importe_del_iva = "0.00";
+                                iva_solo = "0.00";
+
+
+                            }
+                            // MessageBox.Show("" + importe_del_iva);
+                            // MessageBox.Show("" + iva_solo);
+
+                            //NUMERO DE LA CUENTA
+                            conexionmy.Open();
+                            SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT into interesSemanal_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_A.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+                            //LAS LEYENDAS con if segun empr
+                            conexionmy.Open();
+                            SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            comando_B.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+
+                            //EL MONTO DEL PRESTAMO me quede donde dice monteo del importe en notas d diarii linea 3236 en vb net
+                            string monto_valor_T;
+                            //monto_valor_T = Convert.ToString(string.Format("{0:F2}", importe_del_iva)); //Convert.ToString(importe_del_iva);
+                            //monto_valor_T = string.Format(monto_valor_T, "####0.000000");
+
+                            decimal unos = decimal.Round(Convert.ToDecimal(importe_del_iva), 2, MidpointRounding.AwayFromZero);
+                            monto_valor_T = string.Format("{0:0.000000}", unos);
+
+
+
+                            conexionmy.Open();
+                            SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + monto_valor_T + ",1.00" + "')", conexionmy);
+                            comando_D.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                            conexionmy.Open();
+                            SqlCommand comando_D_D = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_D.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                            //LAS LEYENDAS2 segun la empresa entr otr if
+                            conexionmy.Open();
+                            SqlCommand comando_Bw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            comando_Bw.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+
+                            string monto_valor_G;
+                            //monto_valor_G = Convert.ToString(string.Format("{0:F2}", iva_solo)); //Convert.ToString(iva_solo);
+                            //monto_valor_G = string.Format(monto_valor_G, "####0.000000");
+
+                            decimal unosi = decimal.Round(Convert.ToDecimal(iva_solo), 2, MidpointRounding.AwayFromZero);
+                            monto_valor_G = string.Format("{0:0.000000}", unosi);
+
+
+                            conexionmy.Open();
+                            SqlCommand comando_D_H = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + monto_valor_G + ",1.00" + "')", conexionmy);
+                            comando_D_H.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+
+                            //string monto_valor_GG;
+                            //monto_valor_GG = Convert.ToString(iva_solo);
+                            //monto_valor_GG = string.Format(monto_valor_GG, "####0.000000");
+
+                            //conexionmy.Open();
+                            //SqlCommand comando_D_S_R = new SqlCommand("USE " + this.label4.Text + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + monto_valor_GG + ",1.00" + "')", conexionmy);
+                            //comando_D_S_R.ExecuteNonQuery();
+                            //conexionmy.Close();
+
+                        }//cierre del else
+                    }//cierre del for each
+                     //string letra = "DESEMP";
+                    DataTable tablacobros_L = new DataTable();
+                    tablacobros_L.Clear();
+                    SqlDataAdapter comando_carga_L = new SqlDataAdapter("USE " + server +
+                    " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas   WHERE STATUS = 'VALIDO' and " +
+                    " FechaFact BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' and  '" + fecha_domingo.ToString("dd-MM-yyyy") + "'" +
+                   "", conexionmy);
+                    //comienza el if de lleno o vacio
+                    comando_carga_L.Fill(tablacobros_L);
+                    //this.dataGridView4.DataSource = tablacobros_L;
+                    //veo si esta vacio el dia
+                    if (tablacobros_L.Rows.Count == 0)
+                    {
+                    }
+                    else
+                    {
+                        total_fact = tablacobros_L.Rows[0].ItemArray[0].ToString();//contrato
+                        total_iva_fact = tablacobros_L.Rows[0].ItemArray[1].ToString();//status
+
+                        if (total_fact == "")
+                        {
+                            total_fact = "0.00";
+                            total_iva_fact = "0.00";
+
+
+                        }
+                        conexionmy.Open();
+                        SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "4000-003-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_D_S_T.ExecuteNonQuery();
+                        conexionmy.Close();
+                        //LAS LEYENDAS2 segun la empresa entr otr if
+                        if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_Bwe = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            comando_Bwe.ExecuteNonQuery();
+                            conexionmy.Close();
+                        }
+                        else
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_Bwer = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                            comando_Bwer.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+                        conexionmy.Open();
+                        SqlCommand comando_B_re = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        comando_B_re.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        string monto_valor_Ger;
+                        //monto_valor_Ger = Convert.ToString(string.Format("{0:F2}", total_fact)); //Convert.ToString(total_fact);
+                        //monto_valor_Ger = string.Format(monto_valor_Ger, "####0.000000");
+
+                        decimal unosid = decimal.Round(Convert.ToDecimal(total_fact), 2, MidpointRounding.AwayFromZero);
+                        monto_valor_Ger = string.Format("{0:0.000000}", unosid);
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hi = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + monto_valor_Ger + ",1.00" + "')", conexionmy);
+                        comando_D_Hi.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "2005-002-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_D_Hiw.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_Bwek = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            comando_Bwek.ExecuteNonQuery();
+                            conexionmy.Close();
+                        }
+                        else
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_Bwero = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                            comando_Bwero.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+                        conexionmy.Open();
+                        SqlCommand comando_B_rem = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        comando_B_rem.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        string monto_valor_Gero;
+                        //monto_valor_Gero = Convert.ToString(string.Format("{0:F2}", total_iva_fact)); //Convert.ToString(total_iva_fact);
+                        //monto_valor_Gero = string.Format(monto_valor_Gero, "####0.000000");
+
+                        decimal unoside = decimal.Round(Convert.ToDecimal(total_iva_fact), 2, MidpointRounding.AwayFromZero);
+                        monto_valor_Gero = string.Format("{0:0.000000}", unoside);
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hiu = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + monto_valor_Gero + ",1.00" + "')", conexionmy);
+                        comando_D_Hiu.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_remu = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('FIN')", conexionmy);
+                        comando_B_remu.ExecuteNonQuery();
+                        conexionmy.Close();
+                    }//cierre del else total
+
+
+
+
+                    //LA CONSULTA FIN
+
+                    fecha_inicial = fecha_lunes.ToString("dd-MM-yyyy");
+                    fecha_final = fecha_domingo.ToString("dd-MM-yyyy");
+
+
+
+
+
+                    notas_interes_semanal();
+
+                    contador = contador + 1;
+
+
+
+                }//while
+
+
+            }//try
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void notas_interes_semanal()
+        {
+            SqlConnection conexionmy = new SqlConnection();
+            conexionmy.ConnectionString = sqlcnx;//conexion mysql
+            DataTable tablaprestamos = new DataTable();
+            tablaprestamos.Clear();
+            SqlDataAdapter datos_presa = new SqlDataAdapter("USE " + server + "  " +
+                "SELECT * FROM  interesSemanal_poliza " +
+                " order by  no asc " +
+                "", conexionmy);
+            datos_presa.Fill(tablaprestamos);
+            // this.dataGridView2.DataSource = tablaprestamos;
+            if (File.Exists(path + "/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
+            else
+            {
+                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
+                foreach (DataRow fila in tablaprestamos.Rows)
+                    escribir.WriteLine(fila[1]);
+                escribir.Close();
+            }
+
+        }
+
+
+
+        #endregion
+
+        #region Remision Semanal
+        public void remisiones_semanal()
+        {
+
+
+            poliza_remisiones_semanal();
+
+
+
+        }
+
+        public void poliza_remisiones_semanal()
+        {
+            try
+            {
+                // int dia_en_mes_ret;
+                int mes_configurado;
+                int total_dias;
+                string primer_fecha;
+                string segunda_fecha;
+                int contador = 1;
+                string que_dia_es;
+                int suma = 0;
+                int resta = 0;
+
+                DateTime fecha_lunes;
+                DateTime fecha_domingo;
+                DateTime fecha_dia_final;
+                DateTime fecha_dia_inicial;
+                //mes
+                //año
+                total_dias = DateTime.DaysInMonth(Convert.ToInt32(año), Convert.ToInt32(mes));
+                mes_configurado = Convert.ToInt32(mes);
+                fecha_dia_final = Convert.ToDateTime(año + "-" + mes + "-" + total_dias);
+                fecha_dia_inicial = Convert.ToDateTime(año + "-" + mes + "-" + "01");
+                string mi_Caja;
+                string total_rem = "0";
+                //  string total_iva_fact = "0";
+                //2. cargo las cajas de la sucursal seleccionada
+                switch (mes)
+                {
+                    case "01":
+                        mes_letra = "Enero";
+                        break;
+                    case "02":
+                        mes_letra = "Febrero";
+                        break;
+                    case "03":
+                        mes_letra = "Marzo";
+                        break;
+                    case "04":
+                        mes_letra = "Abril";
+                        break;
+                    case "05":
+                        mes_letra = "Mayo";
+                        break;
+                    case "06":
+                        mes_letra = "Junio";
+                        break;
+                    case "07":
+                        mes_letra = "Julio";
+                        break;
+                    case "08":
+                        mes_letra = "Agosto";
+                        break;
+                    case "09":
+                        mes_letra = "Septiembre";
+                        break;
+                    case "10":
+                        mes_letra = "Octubre";
+                        break;
+                    case "11":
+                        mes_letra = "Noviembre";
+                        break;
+                    case "12":
+                        mes_letra = "Diciembre";
+                        break;
+                    default:
+                        break;
+
+                }
+
+                progressBarX5.Maximum = dias_en_mes;
+                progressBarX5.Value = 0;
+                //primer_fecha = año + "-" + mes + "-" + "01";//primer fecha
+                //segunda_fecha = año + "-" + mes + "-" + "01";//primer fecha
+                while (contador <= total_dias)//segun el numero de dias del mes
+                {
+                    backgroundWorker6.ReportProgress(total_dias);
+
+                    fecha_cinco = Convert.ToString(contador);
+                    if (fecha_cinco.Length == 1)
+                    {
+                        fecha_cinco = "0" + fecha_cinco;
+                    }
+
+                    SqlConnection conexionmy = new SqlConnection();
+                    conexionmy.ConnectionString = sqlcnx;//conexion mysql
+
+                    conexionmy.Open();
+                    SqlCommand comando_crea = new SqlCommand("USE " + server +
+                    " truncate table remisionSemanal_poliza " +
+                    " ", conexionmy);
+                    comando_crea.ExecuteNonQuery();
+                    conexionmy.Close();
+                    //MessageBox.Show("" + fecha_cinco);
+                    conexionmy.Open();
+                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + letra + "')", conexionmy);//letra
+                    simbolo.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    conexionmy.Open();
+                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
+                    diadepoliza.ExecuteNonQuery();
+                    conexionmy.Close();
+
+                    conexionmy.Open();
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);//dia
+                    diadepolizas.ExecuteNonQuery();
+                    conexionmy.Close();
+
+
+                    conexionmy.Open();
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES(' ')", conexionmy);
+                    leyendaPL.ExecuteNonQuery();
+                    conexionmy.Close();
+                    ////este es diferente con iff segn la empresa
+
+                    //obtengo la primer fecha
+                    primer_fecha = año + "-" + mes + "-" + contador;
+                    segunda_fecha = año + "-" + mes + "-" + contador;
+                    //obtengo el dia lunes
+                    que_dia_es = Convert.ToDateTime(primer_fecha).DayOfWeek.ToString("d");
+                    //verifico que dias
+
+                    if (Convert.ToInt32(que_dia_es) == 1)//es lunes?
+                    {
+                        //inicio = 1;//no voy a restar
+
+                        //ahora mis inicios
+                        fecha_lunes = DateTime.Parse(primer_fecha);
+                    }
+                    else
+                    {
+                        //ahora mis inicios
+                        resta = Convert.ToInt32(que_dia_es) - 1;//dias que restare para llegar al lunes
+                        fecha_lunes = DateTime.Parse(primer_fecha).AddDays(-resta);
+                    }
+
+                    ////y aqui empieza la primer compracion saber si aun estoy en el mes que corresponde de dia lunes
+                    int MES_INICIO = fecha_lunes.Month;
+                    // MessageBox.Show("me inicio" + MES_INICIO + "" + mes_configurado);
+                    if (MES_INICIO == mes_configurado && Convert.ToInt32(Convert.ToDateTime(fecha_lunes).DayOfWeek.ToString("d")) == 1)//si mes inicio es igual a mes operativo
+                    {
+                        //no hago nada y se que si esta el lunes en ese dia de la semna
+                    }
+                    else
+                    {
+                        fecha_lunes = fecha_lunes.AddDays(1);
+                    }
+                    if (fecha_lunes.Month < mes_configurado)
+                    {
+                        fecha_lunes = fecha_dia_inicial;
+                    }
+
+                    //domingo
+                    if (Convert.ToInt32(que_dia_es) == 0)//si es domingo
+                    {
+                        fecha_domingo = DateTime.Parse(segunda_fecha);
+                    }
+                    else
+                    {
+                        suma = 7 - Convert.ToInt32(que_dia_es);//seran dias que sumare para llegar a domindngo
+                        fecha_domingo = DateTime.Parse(segunda_fecha).AddDays(suma);
+                    }
+                    int MES_FINAL = fecha_domingo.Month;
+                    if (MES_FINAL == mes_configurado && Convert.ToInt32(Convert.ToDateTime(fecha_domingo).DayOfWeek.ToString("d")) == 0 && fecha_domingo > fecha_lunes)//si mes inicio es igual a mes operativo
+                    {
+                        //no hago nada y se que si esta el lunes en ese dia de la semna
+                    }
+                    else
+                    {
+                        fecha_domingo = fecha_domingo.AddDays(suma);
+                    }
+                    if (fecha_domingo == fecha_lunes) //se entiende que domingo es igual a 7 y entonces sumo
+                    {
+                        fecha_domingo = fecha_domingo.AddDays(6);
+
+                    }
+                    if (fecha_domingo.Month > mes_configurado)
+                    {
+                        fecha_domingo = fecha_dia_final;
+                    }
+
+
+
+                    switch (mes)
+                    {
+                        case "01":
+                            mes_letra = "Enero";
+                            break;
+                        case "02":
+                            mes_letra = "Febrero";
+                            break;
+                        case "03":
+                            mes_letra = "Marzo";
+                            break;
+                        case "04":
+                            mes_letra = "Abril";
+                            break;
+                        case "05":
+                            mes_letra = "Mayo";
+                            break;
+                        case "06":
+                            mes_letra = "Junio";
+                            break;
+                        case "07":
+                            mes_letra = "Julio";
+                            break;
+                        case "08":
+                            mes_letra = "Agosto";
+                            break;
+                        case "09":
+                            mes_letra = "Septiembre";
+                            break;
+                        case "10":
+                            mes_letra = "Octubre";
+                            break;
+                        case "11":
+                            mes_letra = "Noviembre";
+                            break;
+                        case "12":
+                            mes_letra = "Diciembre";
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                    foreach (DataRow dr in tablecaja_dos.Rows)
+                    {
+                        string leyenda_1;
+                        mi_Caja = dr[0].ToString();//contrato
+
+                        DataTable tablasql = new DataTable();
+                        SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                            "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                            "", conexionmy);
+                        datosSql.Fill(tablasql);
+                        LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
+                        CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
+                        CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
+                        CUENTA_IVA = tablasql.Rows[0].ItemArray[8].ToString();
+                        NUMERO_DE_CAJA = tablasql.Rows[0].ItemArray[3].ToString();
+                        DEPARTAMENTO = tablasql.Rows[0].ItemArray[9].ToString();
+                        CUENTA_PRESTAMOS = tablasql.Rows[0].ItemArray[5].ToString();
+                        TABLA_CAJA = tablasql.Rows[0].ItemArray[11].ToString();
+                        leyenda_1 = tablasql.Rows[0].ItemArray[10].ToString();
+                        //string letra = "DESEMP";
+                        DataTable tablacobros_Y = new DataTable();
+                        tablacobros_Y.Clear();
+                        //  MessageBox.Show("" + fecha_lunes.ToString("yyyy-MM-dd 00:00:00") +
+                        // fecha_domingo.ToString("yyyy-MM-dd 00:00:00") );
+                        //MessageBox.Show("" + mi_Caja);
+                        SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
+                            " SELECT SUM(Importe) AS Expr1" +
+                   " FROM remisiones " +
+                  " WHERE     (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
+                  " AND (caja = '" + leyenda_1 + "') AND (status = 'VENDIDO') OR" +
+                  " (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
+                  " AND (caja ='" + leyenda_1 + "') AND (status = 'PAGADO')" +
+                    "", conexionmy);
+                        tablacobros_Y.Clear();
+
+                        //comienza el if de lleno o vacio
+                        comando_carga_Y.Fill(tablacobros_Y);
+                        this.dataGridView1.DataSource = tablacobros_Y;
+                        //veo si esta vacio el dia
+                        if (tablacobros_Y.Rows.Count == 0)
+                        {
+
+                            //exportar con nota de no hubo operacion este dia y seguir con rutina
+                        }
+                        else
+                        {
+
+                            string importe_remision;
+
+                            importe_remision = this.dataGridView1.Rows[0].Cells[0].Value.ToString();//this.dataGridView1.Rows[0].ItemArray[0].ToString();//contrato
+                            if (importe_remision == "")
+                            {
+                                importe_remision = "0.00";
+
+                            }
+                            //NUMERO DE LA CUENTA
+                            conexionmy.Open();//'" & Me.TextBox11.Text + "                " + ",  " + Me.TextBox15.Text & "'
+                            SqlCommand comando_A = new SqlCommand("USE " + server + " INSERT into remisionSemanal_poliza(cuenta) VALUES('" + CUENTA_CAJA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_A.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+                            //LAS LEYENDAS con if segun empr
+                            conexionmy.Open();
+                            SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Ventas " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            comando_B.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+
+                            //EL MONTO DEL PRESTAMO me quede donde dice monteo del importe en notas d diarii linea 3236 en vb net
+                            string monto_valor_T;
+                            //  importe_remision = Convert.ToString(string.Format("{0:F2}",importe_remision));
+                            // monto_valor_T = Convert.ToString(string.Format("{0:000000}", importe_remision)); //Convert.ToString(string.Format("####0.000000",monto_valor_T));
+
+                            decimal uno = decimal.Round(Convert.ToDecimal(importe_remision), 2, MidpointRounding.AwayFromZero);
+                            monto_valor_T = string.Format("{0:0.000000}", uno);
+
+
+                            conexionmy.Open();
+                            SqlCommand comando_D = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + monto_valor_T + ",1.00" + "')", conexionmy);
+                            comando_D.ExecuteNonQuery();
+                            conexionmy.Close();
+
+
+                        }//cierre del else
+                    }//cierre del for each
+                    //string letra = "DESEMP";
+                    DataTable tablacobros_L = new DataTable();
+                    tablacobros_L.Clear();
+                    SqlDataAdapter comando_carga_L = new SqlDataAdapter(" USE " + server +
+                            " SELECT SUM(Importe) AS Expr1" +
+                   " FROM remisiones " +
+                  " WHERE     (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
+                  " AND (status = 'VENDIDO') OR" +
+                  " (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
+                  " AND  (status = 'PAGADO')" +
+                    "", conexionmy);
+                    //comienza el if de lleno o vacio
+                    comando_carga_L.Fill(tablacobros_L);
+                    //this.dataGridView4.DataSource = tablacobros_L;
+                    //veo si esta vacio el dia
+                    if (tablacobros_L.Rows.Count == 0)
+                    {
+                    }
+                    else
+                    {
+                        total_rem = tablacobros_L.Rows[0].ItemArray[0].ToString();//contrato
+                        if (total_rem == "")
+                        {
+                            total_rem = "0.00";
+
+                        }
+
+                        int año_inicial = 2006;
+                        int nom = 1;
+                        int valor = Convert.ToInt32(año);
+                        string cuatro = "0" + mes;
+                        string seis = "";
+                        while (año_inicial < valor)
+                        {
+                            nom = nom + 1;
+                            año_inicial = año_inicial + 1;
+
+                        }
+                        if (nom < 10)
+                        {
+                            seis = Convert.ToString("00" + nom);
+                        }
+                        if (nom >= 10)
+                        {
+                            seis = Convert.ToString("0" + nom);
+                        }
+
+                        string leyenda_cuenta = "1003" + "-" + seis + "-" + cuatro;
+                        conexionmy.Open();
+                        SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + leyenda_cuenta + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_D_S_T.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_Bwe = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Ventas " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                        comando_Bwe.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_re = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        comando_B_re.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        //ahora la el monto de importe del 97.5%
+
+
+                        double importe_rem = Convert.ToDouble(total_rem);
+                        decimal total_valor;
+                        double porcentaje = 90;//antes 97.5
+                        total_valor = Convert.ToDecimal(importe_rem * porcentaje / 100);
+
+
+                        string monto_valor_Te;
+                        // total_valor = Convert.ToString(string.Format("{0:F2}", total_valor)); //Convert.ToString(total_valor);
+                        //  monto_valor_Te = Convert.ToString(string.Format("{0:000000}",total_valor)); //string.Format(monto_valor_Te, "####0.000000");
+
+                        total_valor = decimal.Round(total_valor, 2, MidpointRounding.AwayFromZero);
+                        monto_valor_Te = string.Format("{0:0.000000}", total_valor);
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_rea = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + monto_valor_Te + ",1.00" + "')", conexionmy);
+                        comando_B_rea.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "4000-003-002" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_D_Hiw.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_Bweh = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Ventas " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                        comando_Bweh.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_remn = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        comando_B_remn.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+                        double diferencia_total;
+                        decimal subtotal_sin_iva;
+                        diferencia_total = Convert.ToDouble(total_rem) - Convert.ToDouble(total_valor);
+                        subtotal_sin_iva = Convert.ToDecimal(diferencia_total / 1.16);
+
+                        string monto_valor_Gero;
+                        // subtotal_sin_iva = Convert.ToString(string.Format("{0:F2}", subtotal_sin_iva));//Convert.ToString(subtotal_sin_iva);
+                        // monto_valor_Gero = Convert.ToString(string.Format("{0:F6}", subtotal_sin_iva)); //string.Format(monto_valor_Gero, "####0.000000");
+
+                        subtotal_sin_iva = decimal.Round(subtotal_sin_iva, 2, MidpointRounding.AwayFromZero);
+                        monto_valor_Gero = string.Format("{0:0.000000}", subtotal_sin_iva);
+
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hiu = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + monto_valor_Gero + ",1.00" + "')", conexionmy);
+                        comando_D_Hiu.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hiwi = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "2005-002-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_D_Hiwi.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_Bwehe = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Ventas " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                        comando_Bwehe.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_remne = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        comando_B_remne.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        string iva_total;
+                        iva_total = Convert.ToString(Convert.ToDouble(total_rem) - Convert.ToDouble(total_valor) - Convert.ToDouble(subtotal_sin_iva));
+
+                        decimal iva_T;
+                        string monto_valor_Geroa;
+                        iva_T = decimal.Round(Convert.ToDecimal(iva_total), 2, MidpointRounding.AwayFromZero);
+                        monto_valor_Geroa = string.Format("{0:0.000000}", iva_T);
+
+                        conexionmy.Open();
+                        SqlCommand comando_D_Hius = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + monto_valor_Geroa + ",1.00" + "')", conexionmy);
+                        comando_D_Hius.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand comando_B_remnea = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('FIN')", conexionmy);
+                        comando_B_remnea.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                    }//cierre del else total
+
+
+
+
+                    //LA CONSULTA FIN
+
+                    fecha_inicial = fecha_lunes.ToString("dd-MM-yyyy");
+                    fecha_final = fecha_domingo.ToString("dd-MM-yyyy");
+
+
+
+
+
+                    notas_remision_semanal();
+
+                    contador = contador + 1;
+
+
+
+                }//while
+
+
+            }//try
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+
+        public void notas_remision_semanal()
+        {
+            SqlConnection conexionmy = new SqlConnection();
+            conexionmy.ConnectionString = sqlcnx;//conexion mysql
+            DataTable tablaprestamos = new DataTable();
+            tablaprestamos.Clear();
+            SqlDataAdapter datos_presa = new SqlDataAdapter("USE " + server + "  " +
+                "SELECT * FROM  remisionSemanal_poliza " +
+                " order by  no asc " +
+                "", conexionmy);
+            datos_presa.Fill(tablaprestamos);
+            //this.dataGridView2.DataSource = tablaprestamos;
+            if (File.Exists(path + "/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
+            else
+            {
+                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
+                foreach (DataRow fila in tablaprestamos.Rows)
+                    escribir.WriteLine(fila[1]);
+                escribir.Close();
+            }
+
+        }
         #endregion
 
 
+        #region BackGroundWorkers
+
+        #region identificaServidor
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            conexion();
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            circularProgress1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            circularProgress1.Visible = false;
+            circularProgress1.IsRunning = false;
+            combos();
+           
+        }
+        #endregion
+
+        #region PrestamosB 
+        private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+
+            prestamos();
+
+        }
+
+        private void backgroundWorker2_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBarX1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            nveces = 0;
+            MessageBox.Show("Poliza Prestamos Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        #endregion
+
+        #region CobrosB
+        private void backgroundWorker3_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            nveces = 0;
+            MessageBox.Show("Poliza Cobros Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void backgroundWorker3_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBarX2.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker3_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            cobros();
+        }
+        #endregion
+
+        #region Interes DiarioB
+        private void backgroundWorker4_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            nveces = 0;
+            MessageBox.Show("Poliza Interes Diario Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void backgroundWorker4_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBarX3.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker4_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            diario_interes();
+        }
+
+        #endregion
+
+        #region Interes SemanalB
+        private void backgroundWorker5_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            semanal_interes();
+        }
+
+        private void backgroundWorker5_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBarX4.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker5_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            nveces = 0;
+            MessageBox.Show("Poliza Interes Semanal Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        #endregion
+
+        #region Remision SemanalB
+        private void backgroundWorker6_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            nveces = 0;
+            MessageBox.Show("Poliza Remision SemanalTerminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void backgroundWorker6_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBarX5.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker6_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            remisiones_semanal();
+        }
+        #endregion
+
+        #endregion
 
 
 
@@ -1428,84 +2700,19 @@ namespace EKPolizasSemp
 
         }
 
-        private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-           
-            prestamos();
-               
-        }
-
-        private void backgroundWorker2_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            progressBarX1.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker2_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            nveces = 0;
-            MessageBox.Show("Poliza Prestamos Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void backgroundWorker3_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            nveces = 0;
-            MessageBox.Show("Poliza Cobros Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void backgroundWorker3_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            progressBarX2.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker3_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            cobros();
-        }
-
-        private void backgroundWorker4_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            nveces = 0;
-            MessageBox.Show("Poliza Interes Diario Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void backgroundWorker4_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            progressBarX3.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker4_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            diario_interes();
-        }
-
-        private void comboBoxEx4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-          
-        }
-
-    
-
-        private void buttonX1_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dialogoRuta = new FolderBrowserDialog();
-
-            if (dialogoRuta.ShowDialog() == DialogResult.OK)
-            {
-
-                path = dialogoRuta.SelectedPath;
-                textBoxX1.Text = path;
-
-            }
-        }
-
-        private void comboBoxEx1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            paso2();
-        }
 
         #endregion
 
-      
+
+
+
+
+
+
+
+
+
+
 
     }
 }
