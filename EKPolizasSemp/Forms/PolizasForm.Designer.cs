@@ -232,11 +232,12 @@
             this.textBoxX1.Border.Class = "TextBoxBorder";
             this.textBoxX1.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.textBoxX1.DisabledBackColor = System.Drawing.Color.White;
+            this.textBoxX1.Enabled = false;
             this.textBoxX1.Location = new System.Drawing.Point(13, 489);
             this.textBoxX1.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxX1.Name = "textBoxX1";
             this.textBoxX1.PreventEnterBeep = true;
-            this.textBoxX1.Size = new System.Drawing.Size(296, 22);
+            this.textBoxX1.Size = new System.Drawing.Size(778, 22);
             this.textBoxX1.TabIndex = 10;
             // 
             // backgroundWorker2

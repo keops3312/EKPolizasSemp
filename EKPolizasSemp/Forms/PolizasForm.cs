@@ -42,8 +42,7 @@ namespace EKPolizasSemp
         int nveces = 0;
         int nveces2 = 0;
         int nveces3 = 0;
-        int nveces4 = 0;
-        int nveces5 = 0;
+        
         int dias_en_mes;
         string fecha_inicial;
         string fecha_final;
@@ -60,7 +59,7 @@ namespace EKPolizasSemp
         string letra3;
         string letra4;
         string letra5;
-        int opcion;
+       
         DataTable tablecaja_dos = new DataTable();
 
         #endregion
@@ -71,12 +70,13 @@ namespace EKPolizasSemp
 
             circularProgress1.Visible = true;
             circularProgress1.IsRunning = true;
+            CheckForIllegalCrossThreadCalls = false;
             backgroundWorker1.RunWorkerAsync();
         }
 
         private void buttonX1_Click(object sender, EventArgs e)
         {
-           // ExisteTabla(server,sqlcnx);
+            ExisteTabla(server,sqlcnx);
             FolderBrowserDialog dialogoRuta = new FolderBrowserDialog();
 
             if (dialogoRuta.ShowDialog() == DialogResult.OK)
@@ -92,30 +92,57 @@ namespace EKPolizasSemp
         {
             paso2();
         }
-
+        //GENERATE
         private void buttonX2_Click(object sender, EventArgs e)
         {
-            progressBarX1.Value = 0;
-            progressBarX2.Value = 0;
-            progressBarX3.Value = 0;
-            progressBarX4.Value = 0;
-            progressBarX5.Value = 0;
-            mes_calculo();
 
-            DialogResult pregunta = MessageBox.Show("Generar Polizas?", "EKPolizasSemp", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (pregunta == DialogResult.Yes)
+            if (!String.IsNullOrEmpty(textBoxX1.Text))
             {
-                //obtener los rangos, fechas de cada mes
-                caja = this.comboBoxEx4.Text;
-                server = this.label4.Text;
-                path = this.textBoxX1.Text;
+                progressBarX1.Value = 0;
+                progressBarX2.Value = 0;
+                progressBarX3.Value = 0;
+                progressBarX4.Value = 0;
+                progressBarX5.Value = 0;
 
-               
+              
 
-                crear_poliza();
+                mes_calculo();
+
+                progressBarX1.Maximum = dias_en_mes;
+                progressBarX2.Maximum = dias_en_mes;
+                progressBarX3.Maximum = dias_en_mes;
+                progressBarX4.Maximum = dias_en_mes;
+                progressBarX5.Maximum = dias_en_mes;
+
+                DialogResult pregunta = MessageBox.Show("Generar Polizas?", 
+                                                        "EKPolizasSemp", 
+                                                        MessageBoxButtons.YesNo, 
+                                                        MessageBoxIcon.Question);
+                if (pregunta == DialogResult.Yes)
+                {
+                   
+
+                    caja = this.comboBoxEx4.Text;
+                    server = this.label4.Text;
+                    path = this.textBoxX1.Text;
+
+                    crear_poliza();
+                }
 
             }
+            else
+            {
+                MessageBox.Show("Ingresa una ruta valida para guardar polizas",
+                                                      "EKPolizasSemp",
+                                                      MessageBoxButtons.OK,
+                                                      MessageBoxIcon.Information);
+                return;
+            }
+          
+           
+
         }
+        //SELECT BOX
         private void comboBoxEx4_SelectedIndexChanged(object sender, EventArgs e)
         {
             caja = this.comboBoxEx4.Text;
@@ -146,44 +173,44 @@ namespace EKPolizasSemp
         private void crear_poliza()
         {
 
-
-
+           
             if (checkBoxX1.Checked == true)
             {
-                letra = textBoxX3.Text;
-                backgroundWorker2.RunWorkerAsync();
+                poliza(1);
 
             }
 
-            if (checkBoxX2.Checked == true)
+            else if (checkBoxX2.Checked == true)
             {
-                letra2 = textBoxX2.Text;
-                backgroundWorker3.RunWorkerAsync();
+                poliza(2);
 
             }
 
-            if (checkBoxX3.Checked == true)
+            else if (checkBoxX3.Checked == true)
             {
-                letra3 = textBoxX4.Text;
-                backgroundWorker4.RunWorkerAsync();
+                poliza(3);
 
             }
 
-            if (checkBoxX4.Checked == true)
+            else if (checkBoxX4.Checked == true)
             {
-                letra4 = textBoxX5.Text;
-                backgroundWorker5.RunWorkerAsync();
+                poliza(4);
 
             }
 
-            if (checkBoxX5.Checked == true)
+            else if (checkBoxX5.Checked == true)
             {
-                letra5 = textBoxX6.Text;
-                backgroundWorker6.RunWorkerAsync();
+                poliza(5);
 
             }
-
-
+            else
+            {
+                MessageBox.Show("Polizas Terminadas",
+                                                    "EKPolizasSemp",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Information);
+            }
+         
 
             #region trash
             ////Todos los checkbox serán considerados como un item de checkboxlist:
@@ -245,7 +272,46 @@ namespace EKPolizasSemp
             #endregion
 
         }
-        private void ExisteTabla(string server,string conexion)
+        private void poliza(int valor)
+        {
+           
+            switch (valor)
+            {
+                case 1:
+                   
+
+                    letra = textBoxX3.Text;
+                    backgroundWorker2.RunWorkerAsync();
+                    break;
+                case 2:
+                   
+
+                    letra2 = textBoxX2.Text;
+                    backgroundWorker3.RunWorkerAsync();
+                    break;
+                case 3:
+                    letra3 = textBoxX4.Text;
+                    backgroundWorker4.RunWorkerAsync();
+                    break;
+                case 4:
+                    letra4 = textBoxX5.Text;
+                    backgroundWorker5.RunWorkerAsync();
+
+                    break;
+                case 5:
+                    letra5 = textBoxX6.Text;
+                    backgroundWorker6.RunWorkerAsync();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+      
+        
+        
+        #region LLenar Formulario
+        private void ExisteTabla(string server, string conexion)
         {
 
             SqlConnection conexionmy = new SqlConnection(conexion);
@@ -325,7 +391,7 @@ namespace EKPolizasSemp
 
 
         }
-     
+
         private void paso2()
         {
 
@@ -416,9 +482,9 @@ namespace EKPolizasSemp
             comboBoxEx1.DataSource = tablasql;
 
 
-           
+
         }
-      
+
         private void conexion()
         {
             //aligual que las demas aplicaciones cargaremos nuestra llave al servidor de oficinas para la conexion directa
@@ -473,11 +539,11 @@ namespace EKPolizasSemp
             }
 
         }
-       
+
         private void mes_calculo()
         {
             //1obtener la fecha inicial
-
+            caja = comboBoxEx4.Text;
             switch (this.comboBoxEx2.Text)
             {
                 case "ENERO":
@@ -543,22 +609,29 @@ namespace EKPolizasSemp
             CUENTA_PRESTAMOS = tablasql.Rows[0].ItemArray[5].ToString();
             TABLA_CAJA = tablasql.Rows[0].ItemArray[11].ToString();
 
-        }
+        } 
+        #endregion
 
         #region Prestamos rutina
+        //INICIO DE GENERACION DE ARCHIVO INTERES
         private void prestamos()
         {
+
+            
            
                 try
                 {
 
-                    progressBarX1.Maximum = dias_en_mes;
-                    progressBarX1.Value = 0;
-                    //string CONTRATO, STATUS, PRESTAMO;
+                    letra = textBoxX3.Text;
+                    //progressBarX1.Maximum = dias_en_mes;
+                    //progressBarX1.Value = 0;
+                   
                     for (nveces = 1; nveces <= dias_en_mes; nveces++)
                     {
 
                         backgroundWorker2.ReportProgress(nveces);
+
+                       // progressBarX1.Value = nveces;
 
                         //2. cargo las cajas de la sucursal seleccionada
                         SqlConnection conexionmy = new SqlConnection();
@@ -576,7 +649,7 @@ namespace EKPolizasSemp
                             fecha_cinco = "0" + fecha_cinco;
                         }
                         fecha_uno = año + "-" + mes + "-" + fecha_cinco;
-                        //MessageBox.Show("" + fecha_cinco);
+                       
                         fecha_dos = fecha_cinco + "/" + mes + "/" + año;
 
                         conexionmy.Open();
@@ -600,12 +673,18 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         poliza_prestamos();
-                    }//for 
+                    }
 
 
+                checkBoxX1.Checked = false;
 
-                }//try
-                catch (Exception ex)
+                crear_poliza();
+
+              
+
+
+            }
+            catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
@@ -614,7 +693,7 @@ namespace EKPolizasSemp
 
         }
 
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE INTERES
         private void poliza_prestamos()
         {
 
@@ -654,8 +733,7 @@ namespace EKPolizasSemp
                 seis = Convert.ToString("0" + nom);
             }
 
-            catorce = CUENTA_PRESTAMOS + "-" + seis + "-" + cuatro; //cuanta para prestamos
-            //la consulta
+            catorce = CUENTA_PRESTAMOS + "-" + seis + "-" + cuatro; 
             DataTable tablapres = new DataTable();
             tablapres.Clear();
             SqlDataAdapter datos_pres = new SqlDataAdapter("USE " + server + "  " +
@@ -665,11 +743,10 @@ namespace EKPolizasSemp
                 " order by contratos.contrato asc " +
                 "", conexionmy);
             datos_pres.Fill(tablapres);
-            //this.dataGridView1.DataSource = tablapres;
-            //veo si esta vacio el dia
+           
             if (tablapres.Rows.Count == 0)
             {
-                //exportar con nota de no hubo operacion este dia y seguir con rutina
+               
             }
             else
             {
@@ -730,7 +807,7 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //nuevamene la cantidad
                     //ahora la el monto de prestamo             
-                    string h1;
+                    
                     string valor_convertido;
 
                     decimal unosidebedepagares = decimal.Round(Convert.ToDecimal(PRESTAMO), 2, MidpointRounding.AwayFromZero);
@@ -756,18 +833,14 @@ namespace EKPolizasSemp
                 conexionmy.Close();
                 notas();
 
-            }//if del rows
-
-
-            //creamos la poliza en la ruta del primer dia
+            }
 
         }
 
-
+        //CREAR ARCHIVO POR ARCHIVO POOL DE PRESTAMOS
         private void notas()
         {
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
-            //conexionmy.ConnectionString = sqlcnx;//conexion mysql
             DataTable tablaprestamos = new DataTable();
             tablaprestamos.Clear();
             SqlDataAdapter datos_presa = new SqlDataAdapter("USE " + server + "  " +
@@ -775,90 +848,96 @@ namespace EKPolizasSemp
                 " order by  no asc " +
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
-            //this.dataGridView2.DataSource = tablaprestamos;
-            Directory.CreateDirectory(path +"/PRESTAMOS");
-            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "PRESTAMOS/PRESTAMOS " + caja + "-" + fecha_uno + ".pol");
+           
+            if (!Directory.Exists(path + "/PRESTAMOS-" + caja))
+            {
+                Directory.CreateDirectory(path + "/PRESTAMOS-" + caja);
+            }
+               
+            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/PRESTAMOS-" + caja + "/PRESTAMOS " + caja + "-" + fecha_uno + ".pol");
             foreach (DataRow fila in tablaprestamos.Rows)
+            {
                 escribir.WriteLine(fila[1]);
+                
+            }
             escribir.Close();
+
 
         }
 
         #endregion
 
         #region Cobros rutina
+        //INICIO DE GENERACION DE ARCHIVO INTERES
         public void cobros()
         {
             try
             {
+               
+                    letra2 = textBoxX2.Text;
+                    SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
-                //2. cargo las cajas de la sucursal seleccionada
-                SqlConnection conexionmy = new SqlConnection(sqlcnx);
-
-                progressBarX2.Maximum = dias_en_mes;
-                progressBarX2.Value = 0;
-                //string CONTRATO, STATUS, PRESTAMO;
-                for (nveces2 = 1; nveces2 <= dias_en_mes; nveces2++)
-                {
-                    backgroundWorker3.ReportProgress(nveces2);
-
-                    fecha_cinco = Convert.ToString(nveces2);
-                    if (fecha_cinco.Length == 1)
+                    //progressBarX2.Maximum = dias_en_mes;
+                    //progressBarX2.Value = 0;
+                    //string CONTRATO, STATUS, PRESTAMO;
+                    for (nveces2 = 1; nveces2 <= dias_en_mes; nveces2++)
                     {
-                        fecha_cinco = "0" + fecha_cinco;
+                        backgroundWorker3.ReportProgress(nveces2);
+
+                        fecha_cinco = Convert.ToString(nveces2);
+                        if (fecha_cinco.Length == 1)
+                        {
+                            fecha_cinco = "0" + fecha_cinco;
+                        }
+                        fecha_uno = año + "-" + mes + "-" + fecha_cinco;
+                        fecha_dos = fecha_cinco + "/" + mes + "/" + año;
+
+                        conexionmy.Open();
+                        SqlCommand comando_crea = new SqlCommand("USE " + server +
+                        " truncate table cobros_poliza " +
+                        " ", conexionmy);
+                        comando_crea.ExecuteNonQuery();
+                        conexionmy.Close();
+                       
+                        conexionmy.Open();
+                        SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + letra2 + "')", conexionmy);
+                        simbolo.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);
+                        diadepoliza.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        leyendaP.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        conexionmy.Open();
+                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        leyendaPL.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        poliza_cobro();
                     }
-                    fecha_uno = año + "-" + mes + "-" + fecha_cinco;
-                    fecha_dos = fecha_cinco + "/" + mes + "/" + año;
 
-                    conexionmy.Open();
-                    SqlCommand comando_crea = new SqlCommand("USE " + server +
-                    " truncate table cobros_poliza " +
-                    " ", conexionmy);
-                    comando_crea.ExecuteNonQuery();
-                    conexionmy.Close();
-                    //MessageBox.Show("" + fecha_cinco);
-                    conexionmy.Open();
-                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + letra2 + "')", conexionmy);
-                    simbolo.ExecuteNonQuery();
-                    conexionmy.Close();
-
-                    conexionmy.Open();
-                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);
-                    diadepoliza.ExecuteNonQuery();
-                    conexionmy.Close();
-
-                    conexionmy.Open();
-                    SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
-                    leyendaP.ExecuteNonQuery();
-                    conexionmy.Close();
-
-                    conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
-                    leyendaPL.ExecuteNonQuery();
-                    conexionmy.Close();
-
-                    poliza_cobro();
-                }//for 
-
-
-
-
-            }//try
+                checkBoxX2.Checked = false;
+               crear_poliza();
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
 
         }
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE INTERES
         public void poliza_cobro()
         {
 
 
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
-            /*conexionmy.ConnectionString = sqlcnx;//conexion mysql*/
-
-
+          
             fecha_tres = año;
             fecha_cuatro = mes;
 
@@ -897,12 +976,10 @@ namespace EKPolizasSemp
 
             //comienza el if de lleno o vacio
             comando_carga.Fill(tablacobros);
-            //this.dataGridView1.DataSource = tablacobros;
-
-            //veo si esta vacio el dia
+           
             if (tablacobros.Rows.Count == 0)
             {
-                //exportar con nota de no hubo operacion este dia y seguir con rutina
+               
             }
             else
             {
@@ -931,8 +1008,7 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
                     string monto_valor;
-                    //monto_valor = Convert.ToString(DEBE);
-                    //monto_valor = string.Format(monto_valor, "####0.000000");
+                   
                     decimal unosidebed = decimal.Round(Convert.ToDecimal(DEBE), 2, MidpointRounding.AwayFromZero);
                     monto_valor = string.Format("{0:0.000000}", unosidebed);
 
@@ -1024,10 +1100,9 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //nuevamene la cantidad
                     //ahora la el monto de prestamo             
-                    //string h1;
+                   
                     string valor_convertido;
-                    //h1 = Convert.ToString(PRESTAMO);
-                    //valor_convertido = string.Format(h1, "####0.000000");
+                   
 
                     decimal unosidebede = decimal.Round(Convert.ToDecimal(PRESTAMO), 2, MidpointRounding.AwayFromZero);
                     valor_convertido = string.Format("{0:0.000000}", unosidebede);
@@ -1135,9 +1210,11 @@ namespace EKPolizasSemp
                 comando_J.ExecuteNonQuery();
                 conexionmy.Close();
                 notas_cobro();
-            }//if del rows
-        }
+            }
 
+            
+        }
+        //CREAR ARCHIVO POR ARCHVIVO POOL DE INTERES
         public void notas_cobro()
         {
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
@@ -1149,26 +1226,32 @@ namespace EKPolizasSemp
                 " order by  no asc " +
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
-            //this.dataGridView2.DataSource = tablaprestamos;
-            Directory.CreateDirectory(path + "/NOTADEPAGO");
-            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "NOTADEPAGO/NOTADEPAGO " + caja + "-" + fecha_uno + ".pol");
-            foreach (DataRow fila in tablaprestamos.Rows)
+
+
+
+            if (!Directory.Exists(path + "/NOTADEPAGO-" + caja))
+            {
+                Directory.CreateDirectory(path + "/NOTADEPAGO-" + caja);
+            }
+            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/NOTADEPAGO-" + caja + "/NOTADEPAGO " + caja + "-" + fecha_uno + ".pol");
+            foreach (DataRow fila in tablaprestamos.Rows) { 
                 escribir.WriteLine(fila[1]);
+             }
             escribir.Close();
 
         }
         #endregion
 
         #region Interes Diario
+        //INICIO DE GENERACION DE ARCHIVO INTERES DIARIO
         public void diario_interes()
         {
             try
             {
-                //if (checkBoxX3.Checked == true)
-                //{
-                //2. cargo las cajas de la sucursal seleccionada
-                SqlConnection conexionmy = new SqlConnection(sqlcnx);
-                // conexionmy.ConnectionString = sqlcnx;//conexion mysql
+                 letra3 = textBoxX4.Text;
+                  
+                 SqlConnection conexionmy = new SqlConnection(sqlcnx);
+               
 
                 progressBarX3.Maximum = dias_en_mes;
                 progressBarX3.Value = 0;
@@ -1235,22 +1318,18 @@ namespace EKPolizasSemp
                     conexionmy.Close();
 
                     poliza_diario();
-                }//for 
+                }
 
-                //MessageBox.Show("Polizas de diario realizadas", "Polizas SEMP", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //}//if
-                //else
-                //{
-                //    semanal_interes();
-                //}
+                checkBoxX3.Checked = false;
+                crear_poliza();
 
-            }//try
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE INTERES DIARIO
         public void poliza_diario()
         {
             //2. cargo las cajas de la sucursal seleccionada
@@ -1529,6 +1608,7 @@ namespace EKPolizasSemp
             }
 
         }
+        //CREAR ARCHIVO POR ARCHIVO POOL DE INTERES DIARIO
         public void notas_diario()
         {
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
@@ -1541,10 +1621,21 @@ namespace EKPolizasSemp
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
             //this.dataGridView2.DataSource = tablaprestamos;
-            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/DIARIO " + caja + "-" + fecha_uno + ".pol");
+          
+
+            if (!Directory.Exists(path + "/DIARIO-" + caja))
+            {
+                Directory.CreateDirectory(path + "/DIARIO-" + caja);
+            }
+
+
+            System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/DIARIO-" + caja +"/DIARIO " + caja + "-" + fecha_uno + ".pol");
             foreach (DataRow fila in tablaprestamos.Rows)
+            {
                 escribir.WriteLine(fila[1]);
+            }        
             escribir.Close();
+         
         }
 
 
@@ -1553,13 +1644,7 @@ namespace EKPolizasSemp
 
         #region Interes Semanal
 
-        public void semanal_interes()
-        {
-
-            poliza_interes_semanal();
-
-        }
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE INTERES SEMANAL
         public void poliza_interes_semanal()
         {
             try
@@ -1588,11 +1673,10 @@ namespace EKPolizasSemp
                 string total_fact = "0";
                 string total_iva_fact = "0";
                 //2. cargo las cajas de la sucursal seleccionada
-                progressBarX4.Maximum = dias_en_mes;
-                progressBarX4.Value = 0;
+                //progressBarX4.Maximum = dias_en_mes;
+                //progressBarX4.Value = 0;
 
-                //primer_fecha = año + "-" + mes + "-" + "01";//primer fecha
-                //segunda_fecha = año + "-" + mes + "-" + "01";//primer fecha
+               
                 while (contador <= total_dias)//segun el numero de dias del mes
                 {
                     backgroundWorker5.ReportProgress(contador);
@@ -2004,14 +2088,16 @@ namespace EKPolizasSemp
 
                 }//while
 
+                checkBoxX4.Checked = false;
+                crear_poliza();
 
-            }//try
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
+        //CREAR ARCHIVO POR ARCHIVO POOL DE INTERES SEMANAL
         public void notas_interes_semanal()
         {
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
@@ -2024,32 +2110,29 @@ namespace EKPolizasSemp
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
             // this.dataGridView2.DataSource = tablaprestamos;
-            if (File.Exists(path + "/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
-            else
+            if (!Directory.Exists(path + "/intSEM-" + caja))
             {
-                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
-                foreach (DataRow fila in tablaprestamos.Rows)
-                    escribir.WriteLine(fila[1]);
-                escribir.Close();
+                Directory.CreateDirectory(path + "/intSEM-" + caja);
             }
 
+            if (File.Exists(path + "/intSEM-" + caja + "/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
+            else
+            {
+                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/intSEM-" + caja +"/intSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
+                foreach (DataRow fila in tablaprestamos.Rows)
+                {
+                    escribir.WriteLine(fila[1]);
+                }
+                escribir.Close();
+            }
+          
         }
-
-
 
         #endregion
 
         #region Remision Semanal
-        public void remisiones_semanal()
-        {
 
-
-            poliza_remisiones_semanal();
-
-
-
-        }
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE REMISION SEMANAL
         public void poliza_remisiones_semanal()
         {
             try
@@ -2121,10 +2204,9 @@ namespace EKPolizasSemp
 
                 }
 
-                progressBarX5.Maximum = dias_en_mes;
-                progressBarX5.Value = 0;
-                //primer_fecha = año + "-" + mes + "-" + "01";//primer fecha
-                //segunda_fecha = año + "-" + mes + "-" + "01";//primer fecha
+                //progressBarX5.Maximum = dias_en_mes;
+                //progressBarX5.Value = 0;
+               
                 while (contador <= total_dias)//segun el numero de dias del mes
                 {
                     backgroundWorker6.ReportProgress(contador);
@@ -2300,9 +2382,7 @@ namespace EKPolizasSemp
                         //string letra = "DESEMP";
                         DataTable tablacobros_Y = new DataTable();
                         tablacobros_Y.Clear();
-                        //  MessageBox.Show("" + fecha_lunes.ToString("yyyy-MM-dd 00:00:00") +
-                        // fecha_domingo.ToString("yyyy-MM-dd 00:00:00") );
-                        //MessageBox.Show("" + mi_Caja);
+                       
                         SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
                             " SELECT SUM(Importe) AS Expr1" +
                    " FROM remisiones " +
@@ -2542,7 +2622,8 @@ namespace EKPolizasSemp
 
                 }//while
 
-
+                checkBoxX5.Checked = false;
+                crear_poliza();
             }//try
             catch (Exception ex)
             {
@@ -2551,7 +2632,7 @@ namespace EKPolizasSemp
 
         }
 
-
+        //CREAR EL TABLE DEL POOL DE POLIZA DE REMISION SEMANAL
         public void notas_remision_semanal()
         {
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
@@ -2564,14 +2645,22 @@ namespace EKPolizasSemp
                 "", conexionmy);
             datos_presa.Fill(tablaprestamos);
             //this.dataGridView2.DataSource = tablaprestamos;
-            if (File.Exists(path + "/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
+            if (!Directory.Exists(path + "/REMSEM-" + caja))
+            {
+                Directory.CreateDirectory(path + "/REMSEM-" + caja);
+            }
+
+            if (File.Exists(path + "/REMSEM-" + caja + "/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol")) { }
             else
             {
-                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
+                System.IO.StreamWriter escribir = new System.IO.StreamWriter(path + "/REMSEM-" + caja +"/REMSEM " + caja + "-" + fecha_inicial + "-" + fecha_final + ".pol");
                 foreach (DataRow fila in tablaprestamos.Rows)
+                {
                     escribir.WriteLine(fila[1]);
+                } 
                 escribir.Close();
             }
+   
 
         }
         #endregion
@@ -2603,19 +2692,21 @@ namespace EKPolizasSemp
         private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
 
-            prestamos();
+           prestamos();
 
         }
 
         private void backgroundWorker2_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            progressBarX1.Value = e.ProgressPercentage;
+           progressBarX1.Value = e.ProgressPercentage;
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            nveces = 0;
-            MessageBox.Show("Poliza Prestamos Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+             nveces = 0;
+          
+          
+          
         }
         #endregion
 
@@ -2623,17 +2714,18 @@ namespace EKPolizasSemp
         private void backgroundWorker3_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             nveces2 = 0;
-            MessageBox.Show("Poliza Cobros Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+         
+
         }
 
-        private void backgroundWorker3_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            progressBarX2.Value = e.ProgressPercentage;
-        }
+         private void backgroundWorker3_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+         {
+              progressBarX2.Value = e.ProgressPercentage;
+         }
 
-        private void backgroundWorker3_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            cobros();
+         private void backgroundWorker3_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+         {
+               cobros();
         }
         #endregion
 
@@ -2641,7 +2733,9 @@ namespace EKPolizasSemp
         private void backgroundWorker4_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             nveces3 = 0;
-            MessageBox.Show("Poliza Interes Diario Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+          
+          
+           
         }
 
         private void backgroundWorker4_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -2659,7 +2753,7 @@ namespace EKPolizasSemp
         #region Interes SemanalB
         private void backgroundWorker5_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            semanal_interes();
+            poliza_interes_semanal();
         }
 
         private void backgroundWorker5_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -2669,8 +2763,7 @@ namespace EKPolizasSemp
 
         private void backgroundWorker5_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            nveces = 0;
-            MessageBox.Show("Poliza Interes Semanal Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+          
         }
 
         #endregion
@@ -2678,11 +2771,11 @@ namespace EKPolizasSemp
         #region Remision SemanalB
         private void backgroundWorker6_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            nveces = 0;
-            MessageBox.Show("Poliza Remision Semanal Terminada", "EKPolizasSemp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+           
+         
         }
 
-      
+
 
         private void backgroundWorker6_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
@@ -2691,7 +2784,7 @@ namespace EKPolizasSemp
 
         private void backgroundWorker6_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            remisiones_semanal();
+            poliza_remisiones_semanal();
         }
         #endregion
 
@@ -2730,16 +2823,6 @@ namespace EKPolizasSemp
 
 
         #endregion
-
-
-
-
-
-
-
-
-
-
 
 
     }
