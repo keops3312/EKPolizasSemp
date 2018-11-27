@@ -153,6 +153,9 @@ namespace EKPolizasSemp
         #endregion
 
         #region Methods (metodos)
+      
+        
+        #region Metodos Generales
         public PolizasForm()
         {
             InitializeComponent();
@@ -173,7 +176,7 @@ namespace EKPolizasSemp
         private void crear_poliza()
         {
 
-           
+
             if (checkBoxX1.Checked == true)
             {
                 poliza(1);
@@ -210,7 +213,7 @@ namespace EKPolizasSemp
                                                     MessageBoxButtons.OK,
                                                     MessageBoxIcon.Information);
             }
-         
+
 
             #region trash
             ////Todos los checkbox serán considerados como un item de checkboxlist:
@@ -274,17 +277,17 @@ namespace EKPolizasSemp
         }
         private void poliza(int valor)
         {
-           
+
             switch (valor)
             {
                 case 1:
-                   
+
 
                     letra = textBoxX3.Text;
                     backgroundWorker2.RunWorkerAsync();
                     break;
                 case 2:
-                   
+
 
                     letra2 = textBoxX2.Text;
                     backgroundWorker3.RunWorkerAsync();
@@ -306,10 +309,9 @@ namespace EKPolizasSemp
                 default:
                     break;
             }
-        }
-      
-        
-        
+        } 
+        #endregion
+
         #region LLenar Formulario
         private void ExisteTabla(string server, string conexion)
         {
