@@ -2265,7 +2265,7 @@ namespace EKPolizasSemp
 
 
                     conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('')", conexionmy);
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
                     leyendaPL.ExecuteNonQuery();
                     conexionmy.Close();
                     ////este es diferente con iff segn la empresa
@@ -2537,7 +2537,7 @@ namespace EKPolizasSemp
 
                         double importe_rem = Convert.ToDouble(total_rem);
                         decimal total_valor;
-                        double porcentaje = 90;//antes 97.5
+                        double porcentaje = 90;//antes 97.5//ajuste de tomar el 90% 19 dic 2018
                         total_valor = Convert.ToDecimal(importe_rem * porcentaje / 100);
 
 
