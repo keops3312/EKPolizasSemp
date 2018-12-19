@@ -96,6 +96,7 @@ namespace EKPolizasSemp
         private void buttonX2_Click(object sender, EventArgs e)
         {
 
+            ExisteTabla(server, sqlcnx);
             if (!String.IsNullOrEmpty(textBoxX1.Text))
             {
                 progressBarX1.Value = 0;
@@ -153,6 +154,7 @@ namespace EKPolizasSemp
         #endregion
 
         #region Methods (metodos)
+         
       
         
         #region Metodos Generales
@@ -319,77 +321,94 @@ namespace EKPolizasSemp
             SqlConnection conexionmy = new SqlConnection(conexion);
 
             conexionmy.Open();
-            SqlCommand simbolo = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
-                     " WHERE type='U' AND name='cobros_poliza') " +
-                     " BEGIN " +
-                     " PRINT 'Existe'" +
-                     " END " +
-                     " ELSE " +
-                     " BEGIN " +
-                     " CREATE TABLE[dbo].[cobros_poliza](" +
-                     "[no][int] IDENTITY(1, 1) NOT NULL," +
-                     "[cuenta][nvarchar](255) NULL," +
-                     "[caja][nvarchar](255) NULL," +
-                     "[fecha][smalldatetime] NULL" +
-                     ") ON[PRIMARY]" +
-                     "END", conexionmy);
+            SqlCommand simbolo = new SqlCommand("USE " + server + " truncate table cobros_poliza ", conexionmy);
             simbolo.ExecuteNonQuery();
             conexionmy.Close();
 
+
+            #region trash
+            //IF EXISTS(SELECT* FROM sysobjects " +
+            //         " WHERE type='U' AND name='cobros_poliza') " +
+            //         " BEGIN " +
+            //         " PRINT 'Existe'" +
+            //         " END " +
+            //         " ELSE " +
+            //         " BEGIN " +
+            //         " CREATE TABLE[dbo].[cobros_poliza](" +
+            //         "[no][int] IDENTITY(1, 1) NOT NULL," +
+            //         "[cuenta][nvarchar](255) NULL," +
+            //         "[caja][nvarchar](255) NULL," +
+            //         "[fecha][smalldatetime] NULL" +
+            //         ") ON[PRIMARY]" +
+            //         "END"
+            #endregion
+
             conexionmy.Open();
-            SqlCommand simbolo2 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
-                     "WHERE type = 'U' AND name = 'diario_poliza' )" +
-                     " BEGIN " +
-                     "PRINT 'Existe'" +
-                     " END " +
-                     " ELSE " +
-                     " BEGIN " +
-                     " CREATE TABLE[dbo].[diario_poliza](" +
-                     "[no][int] IDENTITY(1, 1) NOT NULL," +
-                     "[cuenta][nvarchar](255) NULL," +
-                     "[caja][nvarchar](255) NULL," +
-                     "[fecha][smalldatetime] NULL" +
-                     ") ON[PRIMARY]" +
-                     "END", conexionmy);
+            SqlCommand simbolo2 = new SqlCommand("USE " + server + " truncate table diario_poliza" , conexionmy);
             simbolo2.ExecuteNonQuery();
             conexionmy.Close();
 
+
+            #region trash
+            //IF EXISTS(SELECT* FROM sysobjects " +
+            //         "WHERE type = 'U' AND name = 'diario_poliza' )" +
+            //         " BEGIN " +
+            //         "PRINT 'Existe'" +
+            //         " END " +
+            //         " ELSE " +
+            //         " BEGIN " +
+            //         " CREATE TABLE[dbo].[diario_poliza](" +
+            //         "[no][int] IDENTITY(1, 1) NOT NULL," +
+            //         "[cuenta][nvarchar](255) NULL," +
+            //         "[caja][nvarchar](255) NULL," +
+            //         "[fecha][smalldatetime] NULL" +
+            //         ") ON[PRIMARY]" +
+            //         "END"
+            #endregion
+
             conexionmy.Open();
-            SqlCommand simbolo3 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
-                     "WHERE type = 'U' AND name = 'interesSemanal_poliza') " +
-                     " BEGIN " +
-                     "PRINT 'Existe'" +
-                     " END " +
-                     " ELSE " +
-                     " BEGIN " +
-                     " CREATE TABLE[dbo].[interesSemanal_poliza](" +
-                     "[no][int] IDENTITY(1, 1) NOT NULL," +
-                     "[cuenta][nvarchar](255) NULL," +
-                     "[caja][nvarchar](255) NULL," +
-                     "[fecha][smalldatetime] NULL" +
-                     ") ON[PRIMARY]" +
-                     "END", conexionmy);
+            SqlCommand simbolo3 = new SqlCommand("USE " + server + " Truncate table interesSemanal_poliza ", conexionmy);
             simbolo3.ExecuteNonQuery();
             conexionmy.Close();
 
+            #region Trash
+            //IF EXISTS(SELECT* FROM sysobjects " +
+            //         "WHERE type = 'U' AND name = 'interesSemanal_poliza') " +
+            //         " BEGIN " +
+            //         "PRINT 'Existe'" +
+            //         " END " +
+            //         " ELSE " +
+            //         " BEGIN " +
+            //         " CREATE TABLE[dbo].[interesSemanal_poliza](" +
+            //         "[no][int] IDENTITY(1, 1) NOT NULL," +
+            //         "[cuenta][nvarchar](255) NULL," +
+            //         "[caja][nvarchar](255) NULL," +
+            //         "[fecha][smalldatetime] NULL" +
+            //         ") ON[PRIMARY]" +
+            //         "END"
+            #endregion
+
             conexionmy.Open();
-            SqlCommand simbolo4 = new SqlCommand("USE " + server + "  IF EXISTS(SELECT * FROM sysobjects " +
-                     "WHERE type = 'U' AND name = 'remisionSemanal_poliza' )" +
-                     " BEGIN " +
-                     "PRINT 'Existe'" +
-                     " END " +
-                     " ELSE " +
-                     " BEGIN " +
-                     " CREATE TABLE[dbo].[remisionSemanal_poliza](" +
-                     "[no][int] IDENTITY(1, 1) NOT NULL," +
-                     "[cuenta][nvarchar](255) NULL," +
-                     "[caja][nvarchar](255) NULL," +
-                     "[fecha][smalldatetime] NULL" +
-                     ") ON[PRIMARY]" +
-                     "END", conexionmy);
+            SqlCommand simbolo4 = new SqlCommand("USE " + server + "  Truncate Table remisionSemanal_poliza ", conexionmy);
             simbolo4.ExecuteNonQuery();
             conexionmy.Close();
 
+            #region Trash
+            //IF EXISTS(SELECT* FROM sysobjects " +
+            //         "WHERE type = 'U' AND name = 'remisionSemanal_poliza' )" +
+            //         " BEGIN " +
+            //         "PRINT 'Existe'" +
+            //         " END " +
+            //         " ELSE " +
+            //         " BEGIN " +
+            //         " CREATE TABLE[dbo].[remisionSemanal_poliza](" +
+            //         "[no][int] IDENTITY(1, 1) NOT NULL," +
+            //         "[cuenta][nvarchar](255) NULL," +
+            //         "[caja][nvarchar](255) NULL," +
+            //         "[fecha][smalldatetime] NULL" +
+            //         ") ON[PRIMARY]" +
+            //         "END"
+            #endregion
 
 
         }
@@ -665,12 +684,12 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "PRESTAMOS DEL " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "PRESTAMOS DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaPL.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -767,7 +786,7 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //LAS LEYENDAS
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "PRESTAMO CONTRATO # " + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "PRESTAMO CONTRATO #  " + CONTRATO + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
@@ -912,12 +931,12 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + "COBROS DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + " " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaPL.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1138,7 +1157,7 @@ namespace EKPolizasSemp
 
                     //un nuevo espacio
                     conexionmy.Open();
-                    SqlCommand comando_Iaabk = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta) VALUES(' ')", conexionmy);
+                    SqlCommand comando_Iaabk = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta) VALUES('')", conexionmy);
                     comando_Iaabk.ExecuteNonQuery();
                     conexionmy.Close();
                     //ingreso del interes    
@@ -1177,7 +1196,7 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //un nuevo espacio
                     conexionmy.Open();
-                    SqlCommand comando_Iaaba = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta)VALUES(' ')", conexionmy);
+                    SqlCommand comando_Iaaba = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta)VALUES('')", conexionmy);
                     comando_Iaaba.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1292,7 +1311,7 @@ namespace EKPolizasSemp
                     if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1300,7 +1319,7 @@ namespace EKPolizasSemp
                     else if (empresa_Conta == "MONTE ROS SA DE CV")
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1308,7 +1327,7 @@ namespace EKPolizasSemp
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario   " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1710,13 +1729,13 @@ namespace EKPolizasSemp
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "' )", conexionmy);//dia
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);//dia
                     diadepolizas.ExecuteNonQuery();
                     conexionmy.Close();
 
 
                     conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('')", conexionmy);
                     leyendaPL.ExecuteNonQuery();
                     conexionmy.Close();
                     ////este es diferente con iff segn la empresa
@@ -2010,7 +2029,7 @@ namespace EKPolizasSemp
 
                         }
                         conexionmy.Open();
-                        SqlCommand comando_B_re = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        SqlCommand comando_B_re = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('')", conexionmy);
                         comando_B_re.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -2048,7 +2067,7 @@ namespace EKPolizasSemp
 
                         }
                         conexionmy.Open();
-                        SqlCommand comando_B_rem = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES(' ')", conexionmy);
+                        SqlCommand comando_B_rem = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('')", conexionmy);
                         comando_B_rem.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -2230,23 +2249,23 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //MessageBox.Show("" + fecha_cinco);
                     conexionmy.Open();
-                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + letra5 + "')", conexionmy);//letra
+                    SqlCommand simbolo = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + letra5 + "')", conexionmy);//letra
                     simbolo.ExecuteNonQuery();
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
+                    SqlCommand diadepoliza = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + fecha_cinco + "')", conexionmy);//dia
                     diadepoliza.ExecuteNonQuery();
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);//dia
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);//dia
                     diadepolizas.ExecuteNonQuery();
                     conexionmy.Close();
 
 
                     conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES(' ')", conexionmy);
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('')", conexionmy);
                     leyendaPL.ExecuteNonQuery();
                     conexionmy.Close();
                     ////este es diferente con iff segn la empresa
@@ -2362,10 +2381,12 @@ namespace EKPolizasSemp
 
                     }
 
+                   
                     foreach (DataRow dr in tablecaja_dos.Rows)
                     {
                         string leyenda_1;
                         mi_Caja = dr[0].ToString();//contrato
+
 
                         DataTable tablasql = new DataTable();
                         SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
