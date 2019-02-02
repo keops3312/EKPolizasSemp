@@ -72,6 +72,8 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
+            this.txtPorcentaje = new System.Windows.Forms.TextBox();
+            this.labelX7 = new DevComponents.DotNetBar.LabelX();
             this.groupPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -103,6 +105,7 @@
             this.comboBoxEx2.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx2.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.comboBoxEx2.TabIndex = 1;
+            this.comboBoxEx2.SelectedIndexChanged += new System.EventHandler(this.comboBoxEx2_SelectedIndexChanged);
             // 
             // comboBoxEx3
             // 
@@ -115,6 +118,7 @@
             this.comboBoxEx3.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx3.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.comboBoxEx3.TabIndex = 2;
+            this.comboBoxEx3.SelectedIndexChanged += new System.EventHandler(this.comboBoxEx3_SelectedIndexChanged);
             // 
             // comboBoxEx4
             // 
@@ -616,11 +620,34 @@
             this.labelX6.TabIndex = 24;
             this.labelX6.Text = "Polizas SEMP2013";
             // 
+            // txtPorcentaje
+            // 
+            this.txtPorcentaje.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPorcentaje.Location = new System.Drawing.Point(433, 341);
+            this.txtPorcentaje.Name = "txtPorcentaje";
+            this.txtPorcentaje.Size = new System.Drawing.Size(52, 29);
+            this.txtPorcentaje.TabIndex = 25;
+            this.txtPorcentaje.Text = "2.5";
+            // 
+            // labelX7
+            // 
+            // 
+            // 
+            // 
+            this.labelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX7.Location = new System.Drawing.Point(270, 347);
+            this.labelX7.Name = "labelX7";
+            this.labelX7.Size = new System.Drawing.Size(157, 23);
+            this.labelX7.TabIndex = 26;
+            this.labelX7.Text = "Porcentaje para Remisiones:";
+            // 
             // PolizasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(773, 432);
+            this.Controls.Add(this.labelX7);
+            this.Controls.Add(this.txtPorcentaje);
             this.Controls.Add(this.labelX6);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
@@ -702,6 +729,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker5;
         private System.ComponentModel.BackgroundWorker backgroundWorker6;
         private DevComponents.DotNetBar.LabelX labelX6;
+        private System.Windows.Forms.TextBox txtPorcentaje;
+        private DevComponents.DotNetBar.LabelX labelX7;
     }
 }
 

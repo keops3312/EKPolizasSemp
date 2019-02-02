@@ -97,7 +97,7 @@ namespace EKPolizasSemp
         {
 
             ExisteTabla(server, sqlcnx);
-            if (!String.IsNullOrEmpty(textBoxX1.Text))
+            if (!string.IsNullOrEmpty(textBoxX1.Text) && !string.IsNullOrEmpty(txtPorcentaje.Text))
             {
                 progressBarX1.Value = 0;
                 progressBarX2.Value = 0;
@@ -133,7 +133,7 @@ namespace EKPolizasSemp
             }
             else
             {
-                MessageBox.Show("Ingresa una ruta valida para guardar polizas",
+                MessageBox.Show("Ingresa una ruta valida para guardar polizas y Porcentaje para Remisiones",
                                                       "EKPolizasSemp",
                                                       MessageBoxButtons.OK,
                                                       MessageBoxIcon.Information);
@@ -282,7 +282,7 @@ namespace EKPolizasSemp
 
             switch (valor)
             {
-                case 1:
+                case 1://prestamos
 
 
                     letra = textBoxX3.Text;
@@ -652,7 +652,7 @@ namespace EKPolizasSemp
 
                         backgroundWorker2.ReportProgress(nveces);
 
-                       // progressBarX1.Value = nveces;
+                      
 
                         //2. cargo las cajas de la sucursal seleccionada
                         SqlConnection conexionmy = new SqlConnection();
@@ -1481,7 +1481,15 @@ namespace EKPolizasSemp
                 conexionmy.Close();
 
                 conexionmy.Open();
-                SqlCommand comando_D_D = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                //ACTUALIZACION DE CUENTA DE INTERES DIARIO
+                string CadenaOriginal = CUENTA_INTERES.Trim();
+                string primerElemento = CUENTA_INTERES.Substring(0, 5);
+                string segundoElemento = "011";
+                string tercerElemento = CUENTA_INTERES.Substring(8, 4);
+                string cadenaConvertida = primerElemento + segundoElemento + tercerElemento;
+
+                //02 FEBRERO 2019
+                SqlCommand comando_D_D = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + cadenaConvertida + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                 comando_D_D.ExecuteNonQuery();
                 conexionmy.Close();
 
@@ -1801,12 +1809,16 @@ namespace EKPolizasSemp
                         fecha_domingo = fecha_domingo.AddDays(6);
 
                     }
-                    if (fecha_domingo.Month > mes_configurado)
+
+                    if (fecha_domingo.Month != mes_configurado)
                     {
                         fecha_domingo = fecha_dia_final;
                     }
 
-
+                    if(fecha_lunes > fecha_domingo)
+                    {
+                      fecha_lunes =fecha_domingo;
+                    }
 
                     switch (mes)
                     {
@@ -2331,9 +2343,19 @@ namespace EKPolizasSemp
                         fecha_domingo = fecha_domingo.AddDays(6);
 
                     }
-                    if (fecha_domingo.Month > mes_configurado)
+                    //if (fecha_domingo.Month > mes_configurado)
+                    //{
+                    //    fecha_domingo = fecha_dia_final;
+                    //}
+
+                    if (fecha_domingo.Month != mes_configurado)
                     {
                         fecha_domingo = fecha_dia_final;
+                    }
+
+                    if (fecha_lunes > fecha_domingo)
+                    {
+                        fecha_lunes = fecha_domingo;
                     }
 
 
@@ -2537,7 +2559,8 @@ namespace EKPolizasSemp
 
                         double importe_rem = Convert.ToDouble(total_rem);
                         decimal total_valor;
-                        double porcentaje = 90;//antes 97.5//ajuste de tomar el 90% 19 dic 2018
+                        double porcentaje =100.00 - double.Parse(txtPorcentaje.Text);//  97.5;//antes 97.5//ajuste de tomar el 90% 19 dic 2018
+                       // decimal porcentajeConvertido=10
                         total_valor = Convert.ToDecimal(importe_rem * porcentaje / 100);
 
 
@@ -2798,7 +2821,15 @@ namespace EKPolizasSemp
          
         }
 
+        private void comboBoxEx3_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void comboBoxEx2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
 
         private void backgroundWorker6_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
