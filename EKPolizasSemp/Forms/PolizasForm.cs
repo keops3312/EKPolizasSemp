@@ -2428,7 +2428,7 @@ namespace EKPolizasSemp
                         DataTable tablacobros_Y = new DataTable();
                         tablacobros_Y.Clear();
                        
-                        SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
+                       SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
                             " SELECT SUM(Importe) AS Expr1" +
                    " FROM remisiones " +
                   " WHERE     (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
