@@ -79,6 +79,7 @@ namespace EKPolizasSemp
             ExisteTabla(server,sqlcnx);
             FolderBrowserDialog dialogoRuta = new FolderBrowserDialog();
 
+            
             if (dialogoRuta.ShowDialog() == DialogResult.OK)
             {
 

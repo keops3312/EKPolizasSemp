@@ -465,7 +465,7 @@
             this.textBoxX6.PreventEnterBeep = true;
             this.textBoxX6.Size = new System.Drawing.Size(100, 20);
             this.textBoxX6.TabIndex = 22;
-            this.textBoxX6.Text = "Iv";
+            this.textBoxX6.Text = "Ir";
             // 
             // textBoxX5
             // 
@@ -479,7 +479,7 @@
             this.textBoxX5.PreventEnterBeep = true;
             this.textBoxX5.Size = new System.Drawing.Size(100, 20);
             this.textBoxX5.TabIndex = 21;
-            this.textBoxX5.Text = "Iv";
+            this.textBoxX5.Text = "Is";
             // 
             // textBoxX4
             // 
@@ -493,7 +493,7 @@
             this.textBoxX4.PreventEnterBeep = true;
             this.textBoxX4.Size = new System.Drawing.Size(100, 20);
             this.textBoxX4.TabIndex = 20;
-            this.textBoxX4.Text = "Ic";
+            this.textBoxX4.Text = "Id";
             // 
             // textBoxX3
             // 
@@ -521,7 +521,7 @@
             this.textBoxX2.PreventEnterBeep = true;
             this.textBoxX2.Size = new System.Drawing.Size(100, 20);
             this.textBoxX2.TabIndex = 18;
-            this.textBoxX2.Text = "Ic";
+            this.textBoxX2.Text = "Ip";
             // 
             // pictureBox1
             // 
