@@ -1482,10 +1482,11 @@ namespace EKPolizasSemp
                 conexionmy.Close();
 
                 conexionmy.Open();
+               
                 //ACTUALIZACION DE CUENTA DE INTERES DIARIO
                 string CadenaOriginal = CUENTA_INTERES.Trim();
                 string primerElemento = CUENTA_INTERES.Substring(0, 5);
-                string segundoElemento = "011";
+                string segundoElemento = "001";
                 string tercerElemento = CUENTA_INTERES.Substring(8, 4);
                 string cadenaConvertida = primerElemento + segundoElemento + tercerElemento;
 
