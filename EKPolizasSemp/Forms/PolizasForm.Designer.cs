@@ -52,6 +52,12 @@
             this.checkBoxX4 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.checkBoxX5 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.groupPanel1 = new DevComponents.DotNetBar.Controls.GroupPanel();
+            this.progressBarX7 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.progressBarX6 = new DevComponents.DotNetBar.Controls.ProgressBarX();
+            this.textBoxX8 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.textBoxX7 = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.checkBoxX7 = new DevComponents.DotNetBar.Controls.CheckBoxX();
+            this.checkBoxX6 = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.progressBarX5 = new DevComponents.DotNetBar.Controls.ProgressBarX();
             this.progressBarX4 = new DevComponents.DotNetBar.Controls.ProgressBarX();
             this.progressBarX3 = new DevComponents.DotNetBar.Controls.ProgressBarX();
@@ -74,6 +80,8 @@
             this.labelX6 = new DevComponents.DotNetBar.LabelX();
             this.txtPorcentaje = new System.Windows.Forms.TextBox();
             this.labelX7 = new DevComponents.DotNetBar.LabelX();
+            this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
             this.groupPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -87,7 +95,7 @@
             this.comboBoxEx1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx1.FormattingEnabled = true;
             this.comboBoxEx1.ItemHeight = 14;
-            this.comboBoxEx1.Location = new System.Drawing.Point(10, 114);
+            this.comboBoxEx1.Location = new System.Drawing.Point(10, 82);
             this.comboBoxEx1.Name = "comboBoxEx1";
             this.comboBoxEx1.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -100,7 +108,7 @@
             this.comboBoxEx2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx2.FormattingEnabled = true;
             this.comboBoxEx2.ItemHeight = 14;
-            this.comboBoxEx2.Location = new System.Drawing.Point(10, 246);
+            this.comboBoxEx2.Location = new System.Drawing.Point(10, 220);
             this.comboBoxEx2.Name = "comboBoxEx2";
             this.comboBoxEx2.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx2.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -113,7 +121,7 @@
             this.comboBoxEx3.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx3.FormattingEnabled = true;
             this.comboBoxEx3.ItemHeight = 14;
-            this.comboBoxEx3.Location = new System.Drawing.Point(10, 180);
+            this.comboBoxEx3.Location = new System.Drawing.Point(10, 147);
             this.comboBoxEx3.Name = "comboBoxEx3";
             this.comboBoxEx3.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx3.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -126,7 +134,7 @@
             this.comboBoxEx4.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx4.FormattingEnabled = true;
             this.comboBoxEx4.ItemHeight = 14;
-            this.comboBoxEx4.Location = new System.Drawing.Point(10, 309);
+            this.comboBoxEx4.Location = new System.Drawing.Point(10, 307);
             this.comboBoxEx4.Name = "comboBoxEx4";
             this.comboBoxEx4.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx4.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -149,7 +157,7 @@
             // 
             this.circularProgress1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.circularProgress1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.circularProgress1.Location = new System.Drawing.Point(58, 89);
+            this.circularProgress1.Location = new System.Drawing.Point(145, 107);
             this.circularProgress1.Name = "circularProgress1";
             this.circularProgress1.ProgressColor = System.Drawing.Color.MidnightBlue;
             this.circularProgress1.ProgressText = "Cargando...";
@@ -164,7 +172,7 @@
             // 
             // 
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(10, 84);
+            this.labelX1.Location = new System.Drawing.Point(10, 52);
             this.labelX1.Name = "labelX1";
             this.labelX1.Size = new System.Drawing.Size(247, 23);
             this.labelX1.TabIndex = 5;
@@ -176,7 +184,7 @@
             // 
             // 
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(10, 214);
+            this.labelX2.Location = new System.Drawing.Point(10, 188);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(121, 25);
             this.labelX2.TabIndex = 6;
@@ -188,7 +196,7 @@
             // 
             // 
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(10, 151);
+            this.labelX3.Location = new System.Drawing.Point(10, 118);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(121, 23);
             this.labelX3.TabIndex = 7;
@@ -200,7 +208,7 @@
             // 
             // 
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX4.Location = new System.Drawing.Point(10, 280);
+            this.labelX4.Location = new System.Drawing.Point(10, 278);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(223, 23);
             this.labelX4.TabIndex = 8;
@@ -248,9 +256,9 @@
             // 
             // 
             this.progressBarX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX1.Location = new System.Drawing.Point(248, 28);
+            this.progressBarX1.Location = new System.Drawing.Point(326, 32);
             this.progressBarX1.Name = "progressBarX1";
-            this.progressBarX1.Size = new System.Drawing.Size(130, 10);
+            this.progressBarX1.Size = new System.Drawing.Size(157, 10);
             this.progressBarX1.TabIndex = 11;
             this.progressBarX1.Text = "progressBarX1";
             // 
@@ -278,7 +286,7 @@
             // 
             // 
             this.checkBoxX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX1.Location = new System.Drawing.Point(20, 22);
+            this.checkBoxX1.Location = new System.Drawing.Point(9, 27);
             this.checkBoxX1.Name = "checkBoxX1";
             this.checkBoxX1.Size = new System.Drawing.Size(100, 23);
             this.checkBoxX1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -291,7 +299,7 @@
             // 
             // 
             this.checkBoxX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX2.Location = new System.Drawing.Point(20, 60);
+            this.checkBoxX2.Location = new System.Drawing.Point(9, 64);
             this.checkBoxX2.Name = "checkBoxX2";
             this.checkBoxX2.Size = new System.Drawing.Size(100, 23);
             this.checkBoxX2.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -304,7 +312,7 @@
             // 
             // 
             this.checkBoxX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX3.Location = new System.Drawing.Point(20, 105);
+            this.checkBoxX3.Location = new System.Drawing.Point(9, 107);
             this.checkBoxX3.Name = "checkBoxX3";
             this.checkBoxX3.Size = new System.Drawing.Size(100, 23);
             this.checkBoxX3.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -317,7 +325,7 @@
             // 
             // 
             this.checkBoxX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX4.Location = new System.Drawing.Point(20, 148);
+            this.checkBoxX4.Location = new System.Drawing.Point(9, 148);
             this.checkBoxX4.Name = "checkBoxX4";
             this.checkBoxX4.Size = new System.Drawing.Size(100, 23);
             this.checkBoxX4.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -330,7 +338,7 @@
             // 
             // 
             this.checkBoxX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.checkBoxX5.Location = new System.Drawing.Point(20, 190);
+            this.checkBoxX5.Location = new System.Drawing.Point(9, 186);
             this.checkBoxX5.Name = "checkBoxX5";
             this.checkBoxX5.Size = new System.Drawing.Size(116, 23);
             this.checkBoxX5.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -341,7 +349,13 @@
             // 
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
+            this.groupPanel1.Controls.Add(this.progressBarX7);
             this.groupPanel1.Controls.Add(this.circularProgress1);
+            this.groupPanel1.Controls.Add(this.progressBarX6);
+            this.groupPanel1.Controls.Add(this.textBoxX8);
+            this.groupPanel1.Controls.Add(this.textBoxX7);
+            this.groupPanel1.Controls.Add(this.checkBoxX7);
+            this.groupPanel1.Controls.Add(this.checkBoxX6);
             this.groupPanel1.Controls.Add(this.progressBarX5);
             this.groupPanel1.Controls.Add(this.progressBarX4);
             this.groupPanel1.Controls.Add(this.progressBarX3);
@@ -359,9 +373,9 @@
             this.groupPanel1.Controls.Add(this.checkBoxX4);
             this.groupPanel1.Controls.Add(this.checkBoxX3);
             this.groupPanel1.DisabledBackColor = System.Drawing.Color.Empty;
-            this.groupPanel1.Location = new System.Drawing.Point(260, 70);
+            this.groupPanel1.Location = new System.Drawing.Point(260, 12);
             this.groupPanel1.Name = "groupPanel1";
-            this.groupPanel1.Size = new System.Drawing.Size(390, 259);
+            this.groupPanel1.Size = new System.Drawing.Size(509, 317);
             // 
             // 
             // 
@@ -393,15 +407,97 @@
             this.groupPanel1.TabIndex = 18;
             this.groupPanel1.Text = "Seleccione Polizas a Generar";
             // 
+            // progressBarX7
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX7.Location = new System.Drawing.Point(326, 270);
+            this.progressBarX7.Name = "progressBarX7";
+            this.progressBarX7.Size = new System.Drawing.Size(157, 10);
+            this.progressBarX7.TabIndex = 33;
+            this.progressBarX7.Text = "progressBarX7";
+            // 
+            // progressBarX6
+            // 
+            // 
+            // 
+            // 
+            this.progressBarX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.progressBarX6.Location = new System.Drawing.Point(326, 230);
+            this.progressBarX6.Name = "progressBarX6";
+            this.progressBarX6.Size = new System.Drawing.Size(157, 10);
+            this.progressBarX6.TabIndex = 32;
+            this.progressBarX6.Text = "progressBarX6";
+            // 
+            // textBoxX8
+            // 
+            // 
+            // 
+            // 
+            this.textBoxX8.Border.Class = "TextBoxBorder";
+            this.textBoxX8.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.textBoxX8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX8.Location = new System.Drawing.Point(227, 266);
+            this.textBoxX8.Name = "textBoxX8";
+            this.textBoxX8.PreventEnterBeep = true;
+            this.textBoxX8.Size = new System.Drawing.Size(56, 20);
+            this.textBoxX8.TabIndex = 31;
+            this.textBoxX8.Text = "Ip";
+            this.textBoxX8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxX7
+            // 
+            // 
+            // 
+            // 
+            this.textBoxX7.Border.Class = "TextBoxBorder";
+            this.textBoxX7.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.textBoxX7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX7.Location = new System.Drawing.Point(227, 226);
+            this.textBoxX7.Name = "textBoxX7";
+            this.textBoxX7.PreventEnterBeep = true;
+            this.textBoxX7.Size = new System.Drawing.Size(56, 20);
+            this.textBoxX7.TabIndex = 30;
+            this.textBoxX7.Text = "Ip";
+            this.textBoxX7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // checkBoxX7
+            // 
+            // 
+            // 
+            // 
+            this.checkBoxX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxX7.Location = new System.Drawing.Point(9, 266);
+            this.checkBoxX7.Name = "checkBoxX7";
+            this.checkBoxX7.Size = new System.Drawing.Size(171, 23);
+            this.checkBoxX7.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxX7.TabIndex = 29;
+            this.checkBoxX7.Text = "Notas de Pago Diario";
+            // 
+            // checkBoxX6
+            // 
+            // 
+            // 
+            // 
+            this.checkBoxX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.checkBoxX6.Location = new System.Drawing.Point(9, 226);
+            this.checkBoxX6.Name = "checkBoxX6";
+            this.checkBoxX6.Size = new System.Drawing.Size(190, 23);
+            this.checkBoxX6.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.checkBoxX6.TabIndex = 28;
+            this.checkBoxX6.Text = "Contratos Desempeñados Diario";
+            // 
             // progressBarX5
             // 
             // 
             // 
             // 
             this.progressBarX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX5.Location = new System.Drawing.Point(248, 196);
+            this.progressBarX5.Location = new System.Drawing.Point(326, 193);
             this.progressBarX5.Name = "progressBarX5";
-            this.progressBarX5.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX5.Size = new System.Drawing.Size(157, 10);
             this.progressBarX5.TabIndex = 27;
             this.progressBarX5.Text = "progressBarX5";
             // 
@@ -411,9 +507,9 @@
             // 
             // 
             this.progressBarX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX4.Location = new System.Drawing.Point(248, 150);
+            this.progressBarX4.Location = new System.Drawing.Point(326, 153);
             this.progressBarX4.Name = "progressBarX4";
-            this.progressBarX4.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX4.Size = new System.Drawing.Size(157, 10);
             this.progressBarX4.TabIndex = 26;
             this.progressBarX4.Text = "progressBarX4";
             // 
@@ -423,9 +519,9 @@
             // 
             // 
             this.progressBarX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX3.Location = new System.Drawing.Point(248, 112);
+            this.progressBarX3.Location = new System.Drawing.Point(326, 112);
             this.progressBarX3.Name = "progressBarX3";
-            this.progressBarX3.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX3.Size = new System.Drawing.Size(157, 10);
             this.progressBarX3.TabIndex = 25;
             this.progressBarX3.Text = "progressBarX3";
             // 
@@ -435,9 +531,9 @@
             // 
             // 
             this.progressBarX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.progressBarX2.Location = new System.Drawing.Point(248, 65);
+            this.progressBarX2.Location = new System.Drawing.Point(326, 69);
             this.progressBarX2.Name = "progressBarX2";
-            this.progressBarX2.Size = new System.Drawing.Size(128, 10);
+            this.progressBarX2.Size = new System.Drawing.Size(157, 10);
             this.progressBarX2.TabIndex = 24;
             this.progressBarX2.Text = "progressBarX2";
             // 
@@ -460,12 +556,14 @@
             // 
             this.textBoxX6.Border.Class = "TextBoxBorder";
             this.textBoxX6.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.textBoxX6.Location = new System.Drawing.Point(142, 193);
+            this.textBoxX6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX6.Location = new System.Drawing.Point(227, 189);
             this.textBoxX6.Name = "textBoxX6";
             this.textBoxX6.PreventEnterBeep = true;
-            this.textBoxX6.Size = new System.Drawing.Size(100, 20);
+            this.textBoxX6.Size = new System.Drawing.Size(56, 20);
             this.textBoxX6.TabIndex = 22;
             this.textBoxX6.Text = "Ir";
+            this.textBoxX6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxX5
             // 
@@ -474,12 +572,14 @@
             // 
             this.textBoxX5.Border.Class = "TextBoxBorder";
             this.textBoxX5.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.textBoxX5.Location = new System.Drawing.Point(142, 148);
+            this.textBoxX5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX5.Location = new System.Drawing.Point(227, 148);
             this.textBoxX5.Name = "textBoxX5";
             this.textBoxX5.PreventEnterBeep = true;
-            this.textBoxX5.Size = new System.Drawing.Size(100, 20);
+            this.textBoxX5.Size = new System.Drawing.Size(56, 20);
             this.textBoxX5.TabIndex = 21;
             this.textBoxX5.Text = "Is";
+            this.textBoxX5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxX4
             // 
@@ -488,12 +588,14 @@
             // 
             this.textBoxX4.Border.Class = "TextBoxBorder";
             this.textBoxX4.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.textBoxX4.Location = new System.Drawing.Point(142, 105);
+            this.textBoxX4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX4.Location = new System.Drawing.Point(227, 110);
             this.textBoxX4.Name = "textBoxX4";
             this.textBoxX4.PreventEnterBeep = true;
-            this.textBoxX4.Size = new System.Drawing.Size(100, 20);
+            this.textBoxX4.Size = new System.Drawing.Size(56, 20);
             this.textBoxX4.TabIndex = 20;
             this.textBoxX4.Text = "Id";
+            this.textBoxX4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxX3
             // 
@@ -502,12 +604,14 @@
             // 
             this.textBoxX3.Border.Class = "TextBoxBorder";
             this.textBoxX3.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.textBoxX3.Location = new System.Drawing.Point(142, 22);
+            this.textBoxX3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX3.Location = new System.Drawing.Point(227, 30);
             this.textBoxX3.Name = "textBoxX3";
             this.textBoxX3.PreventEnterBeep = true;
-            this.textBoxX3.Size = new System.Drawing.Size(100, 20);
+            this.textBoxX3.Size = new System.Drawing.Size(56, 20);
             this.textBoxX3.TabIndex = 19;
             this.textBoxX3.Text = "Pr";
+            this.textBoxX3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxX2
             // 
@@ -516,18 +620,20 @@
             // 
             this.textBoxX2.Border.Class = "TextBoxBorder";
             this.textBoxX2.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.textBoxX2.Location = new System.Drawing.Point(142, 60);
+            this.textBoxX2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxX2.Location = new System.Drawing.Point(227, 67);
             this.textBoxX2.Name = "textBoxX2";
             this.textBoxX2.PreventEnterBeep = true;
-            this.textBoxX2.Size = new System.Drawing.Size(100, 20);
+            this.textBoxX2.Size = new System.Drawing.Size(56, 20);
             this.textBoxX2.TabIndex = 18;
             this.textBoxX2.Text = "Ip";
+            this.textBoxX2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(656, 31);
+            this.pictureBox1.Location = new System.Drawing.Point(162, 8);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(106, 95);
+            this.pictureBox1.Size = new System.Drawing.Size(71, 64);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 19;
             this.pictureBox1.TabStop = false;
@@ -613,12 +719,12 @@
             // 
             this.labelX6.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.labelX6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelX6.Location = new System.Drawing.Point(12, 10);
+            this.labelX6.Location = new System.Drawing.Point(12, 2);
             this.labelX6.Margin = new System.Windows.Forms.Padding(2);
             this.labelX6.Name = "labelX6";
-            this.labelX6.Size = new System.Drawing.Size(378, 45);
+            this.labelX6.Size = new System.Drawing.Size(130, 45);
             this.labelX6.TabIndex = 24;
-            this.labelX6.Text = "Polizas SEMP2013";
+            this.labelX6.Text = "Polizas";
             // 
             // txtPorcentaje
             // 
@@ -640,6 +746,22 @@
             this.labelX7.Size = new System.Drawing.Size(157, 23);
             this.labelX7.TabIndex = 26;
             this.labelX7.Text = "Porcentaje para Remisiones:";
+            // 
+            // backgroundWorker7
+            // 
+            this.backgroundWorker7.WorkerReportsProgress = true;
+            this.backgroundWorker7.WorkerSupportsCancellation = true;
+            this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
+            this.backgroundWorker7.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker7_ProgressChanged);
+            this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
+            // 
+            // backgroundWorker8
+            // 
+            this.backgroundWorker8.WorkerReportsProgress = true;
+            this.backgroundWorker8.WorkerSupportsCancellation = true;
+            this.backgroundWorker8.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker8_DoWork);
+            this.backgroundWorker8.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker8_ProgressChanged);
+            this.backgroundWorker8.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker8_RunWorkerCompleted);
             // 
             // PolizasForm
             // 
@@ -673,7 +795,7 @@
             this.MinimumSize = new System.Drawing.Size(789, 471);
             this.Name = "PolizasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EK Polizas Semp V.2.0";
+            this.Text = "EK Polizas Semp V.3.0";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -731,6 +853,14 @@
         private DevComponents.DotNetBar.LabelX labelX6;
         private System.Windows.Forms.TextBox txtPorcentaje;
         private DevComponents.DotNetBar.LabelX labelX7;
+        private DevComponents.DotNetBar.Controls.ProgressBarX progressBarX7;
+        private DevComponents.DotNetBar.Controls.ProgressBarX progressBarX6;
+        private DevComponents.DotNetBar.Controls.TextBoxX textBoxX8;
+        private DevComponents.DotNetBar.Controls.TextBoxX textBoxX7;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX7;
+        private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX6;
+        private System.ComponentModel.BackgroundWorker backgroundWorker7;
+        private System.ComponentModel.BackgroundWorker backgroundWorker8;
     }
 }
 
