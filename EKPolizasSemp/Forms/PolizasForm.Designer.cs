@@ -82,6 +82,9 @@
             this.labelX7 = new DevComponents.DotNetBar.LabelX();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker8 = new System.ComponentModel.BackgroundWorker();
+            this.txtDias = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtDiasFinal = new System.Windows.Forms.TextBox();
             this.groupPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -108,7 +111,7 @@
             this.comboBoxEx2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx2.FormattingEnabled = true;
             this.comboBoxEx2.ItemHeight = 14;
-            this.comboBoxEx2.Location = new System.Drawing.Point(10, 220);
+            this.comboBoxEx2.Location = new System.Drawing.Point(10, 207);
             this.comboBoxEx2.Name = "comboBoxEx2";
             this.comboBoxEx2.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx2.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -134,7 +137,7 @@
             this.comboBoxEx4.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.comboBoxEx4.FormattingEnabled = true;
             this.comboBoxEx4.ItemHeight = 14;
-            this.comboBoxEx4.Location = new System.Drawing.Point(10, 307);
+            this.comboBoxEx4.Location = new System.Drawing.Point(12, 325);
             this.comboBoxEx4.Name = "comboBoxEx4";
             this.comboBoxEx4.Size = new System.Drawing.Size(223, 20);
             this.comboBoxEx4.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -184,7 +187,7 @@
             // 
             // 
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(10, 188);
+            this.labelX2.Location = new System.Drawing.Point(10, 176);
             this.labelX2.Name = "labelX2";
             this.labelX2.Size = new System.Drawing.Size(121, 25);
             this.labelX2.TabIndex = 6;
@@ -208,7 +211,7 @@
             // 
             // 
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX4.Location = new System.Drawing.Point(10, 278);
+            this.labelX4.Location = new System.Drawing.Point(12, 296);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(223, 23);
             this.labelX4.TabIndex = 8;
@@ -277,7 +280,7 @@
             // 
             // styleManager1
             // 
-            this.styleManager1.ManagerStyle = DevComponents.DotNetBar.eStyle.Office2007VistaGlass;
+            this.styleManager1.ManagerStyle = DevComponents.DotNetBar.eStyle.Office2010Blue;
             this.styleManager1.MetroColorParameters = new DevComponents.DotNetBar.Metro.ColorTables.MetroColorGeneratorParameters(System.Drawing.Color.White, System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(87)))), ((int)(((byte)(154))))));
             // 
             // checkBoxX1
@@ -475,6 +478,7 @@
             this.checkBoxX7.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX7.TabIndex = 29;
             this.checkBoxX7.Text = "Notas de Pago Diario";
+            this.checkBoxX7.CheckedChanged += new System.EventHandler(this.checkBoxX7_CheckedChanged);
             // 
             // checkBoxX6
             // 
@@ -488,6 +492,7 @@
             this.checkBoxX6.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.checkBoxX6.TabIndex = 28;
             this.checkBoxX6.Text = "Contratos Desempeñados Diario";
+            this.checkBoxX6.CheckedChanged += new System.EventHandler(this.checkBoxX6_CheckedChanged);
             // 
             // progressBarX5
             // 
@@ -763,11 +768,40 @@
             this.backgroundWorker8.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker8_ProgressChanged);
             this.backgroundWorker8.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker8_RunWorkerCompleted);
             // 
+            // txtDias
+            // 
+            this.txtDias.Location = new System.Drawing.Point(10, 256);
+            this.txtDias.MaxLength = 2;
+            this.txtDias.Name = "txtDias";
+            this.txtDias.Size = new System.Drawing.Size(42, 20);
+            this.txtDias.TabIndex = 34;
+            this.txtDias.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDias_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(67, 248);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 36);
+            this.label1.TabIndex = 34;
+            this.label1.Text = "Ingresa un Rango si quieres por semana";
+            // 
+            // txtDiasFinal
+            // 
+            this.txtDiasFinal.Location = new System.Drawing.Point(191, 256);
+            this.txtDiasFinal.MaxLength = 2;
+            this.txtDiasFinal.Name = "txtDiasFinal";
+            this.txtDiasFinal.Size = new System.Drawing.Size(42, 20);
+            this.txtDiasFinal.TabIndex = 35;
+            this.txtDiasFinal.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDiasFinal_KeyPress);
+            // 
             // PolizasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(773, 432);
+            this.Controls.Add(this.txtDiasFinal);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtDias);
             this.Controls.Add(this.labelX7);
             this.Controls.Add(this.txtPorcentaje);
             this.Controls.Add(this.labelX6);
@@ -795,7 +829,7 @@
             this.MinimumSize = new System.Drawing.Size(789, 471);
             this.Name = "PolizasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EK Polizas Semp V.3.0";
+            this.Text = "EK Polizas Semp V.3.1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -861,6 +895,9 @@
         private DevComponents.DotNetBar.Controls.CheckBoxX checkBoxX6;
         private System.ComponentModel.BackgroundWorker backgroundWorker7;
         private System.ComponentModel.BackgroundWorker backgroundWorker8;
+        private System.Windows.Forms.TextBox txtDias;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtDiasFinal;
     }
 }
 

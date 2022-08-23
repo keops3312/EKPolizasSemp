@@ -98,7 +98,7 @@ namespace EKPolizasSemp
         //GENERATE
         private void buttonX2_Click(object sender, EventArgs e)
         {
-
+            caja = this.comboBoxEx4.Text;
             ExisteTabla(server, sqlcnx);
             if (!string.IsNullOrEmpty(textBoxX1.Text) && !string.IsNullOrEmpty(txtPorcentaje.Text))
             {
@@ -130,7 +130,7 @@ namespace EKPolizasSemp
                 {
                    
 
-                    caja = this.comboBoxEx4.Text;
+                   // caja = this.comboBoxEx4.Text;
                     server = this.label4.Text;
                     path = this.textBoxX1.Text;
 
@@ -153,7 +153,7 @@ namespace EKPolizasSemp
         //SELECT BOX
         private void comboBoxEx4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            caja = this.comboBoxEx4.Text;
+           // caja = this.comboBoxEx4.Text;
         }
 
 
@@ -529,7 +529,7 @@ namespace EKPolizasSemp
             this.comboBoxEx2.DataSource = meses;
 
             string[] año;
-            año = new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024" };
+            año = new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024","2025", "2026", "2027", "2028", "2029", "2030" };
             this.comboBoxEx3.DataSource = año;
 
 
@@ -553,7 +553,8 @@ namespace EKPolizasSemp
         private void conexion()
         {
             //aligual que las demas aplicaciones cargaremos nuestra llave al servidor de oficinas para la conexion directa
-            string cadena = "C:/SEMP2013/GeneradorPolizasSEMP/Polizas_General/Polizas_General/bin/Debug/cdblista.txt";
+            //string cadena = "C:/SEMP2013/GeneradorPolizasSEMP/Polizas_General/Polizas_General/bin/Debug/cdblista.txt";
+            string cadena= "C:/SEMP2013/cdb/cdb.txt";
             using (StreamReader sr1 = new StreamReader(cadena, true))
             {
 
@@ -688,10 +689,29 @@ namespace EKPolizasSemp
                 {
 
                     letra = textBoxX3.Text;
-                    //progressBarX1.Maximum = dias_en_mes;
-                    //progressBarX1.Value = 0;
+                //progressBarX1.Maximum = dias_en_mes;
+                //progressBarX1.Value = 0;
+                int _nveces;
+                _nveces = 1;
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        _nveces = int.Parse(txtDias.Text);
+                        dias_en_mes = int.Parse(txtDiasFinal.Text);
+                    }
+                    else
+                    {
+                        _nveces = 1;
+                    }
+
+                }
+
+
                    
-                    for (nveces = 1; nveces <= dias_en_mes; nveces++)
+
+                for (nveces=_nveces; nveces <= dias_en_mes; nveces++)
                     {
 
                         backgroundWorker2.ReportProgress(nveces);
@@ -709,6 +729,7 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         fecha_cinco = Convert.ToString(nveces);
+
                         if (fecha_cinco.Length == 1)
                         {
                             fecha_cinco = "0" + fecha_cinco;
@@ -733,7 +754,8 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        //SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + " " + server.Substring(9,5) + "')", conexionmy);
                         leyendaPL.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -779,7 +801,7 @@ namespace EKPolizasSemp
             string seis = "";
             string cuatro;
             string catorce;
-            año_inicial = 2006;
+            año_inicial = 2011;//2006
             nom = 1;
             valor = Convert.ToInt32(año);
             cuatro = "0" + mes;
@@ -942,10 +964,29 @@ namespace EKPolizasSemp
                     letra2 = textBoxX2.Text;
                     SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
-                    //progressBarX2.Maximum = dias_en_mes;
-                    //progressBarX2.Value = 0;
-                    //string CONTRATO, STATUS, PRESTAMO;
-                    for (nveces2 = 1; nveces2 <= dias_en_mes; nveces2++)
+                //progressBarX2.Maximum = dias_en_mes;
+                //progressBarX2.Value = 0;
+                //string CONTRATO, STATUS, PRESTAMO;
+                int _nveces;
+                _nveces = 1;
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        _nveces = int.Parse(txtDias.Text);
+                        dias_en_mes = int.Parse(txtDiasFinal.Text);
+                    }
+                    else
+                    {
+                        _nveces = 1;
+                    }
+
+                }
+
+                  
+
+                for (nveces2 = _nveces; nveces2 <= dias_en_mes; nveces2++)
                     {
                         backgroundWorker3.ReportProgress(nveces2);
 
@@ -980,7 +1021,8 @@ namespace EKPolizasSemp
                         conexionmy.Close();
 
                         conexionmy.Open();
-                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        //SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + " "+ server.Substring(9,5) +  "')", conexionmy);
                         leyendaPL.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1011,7 +1053,7 @@ namespace EKPolizasSemp
             string seis = "";
             string cuatro;
             string catorce;
-            año_inicial = 2006;
+            año_inicial = 2011;//2006
             nom = 1;
             valor = Convert.ToInt32(año);
             cuatro = "0" + mes;
@@ -1034,7 +1076,7 @@ namespace EKPolizasSemp
             DataTable tablacobros = new DataTable();
             tablacobros.Clear();
             SqlDataAdapter comando_carga = new SqlDataAdapter("USE " + server +
-           " SELECT facturas.factura, facturas.contrato, " + caja + ".debe, facturas.importefact, facturas.ivafact, facturas.totalfact, facturas.status FROM  facturas " +
+           " SELECT facturas.factura, facturas.contrato, " + caja + ".debe, facturas.importefact, facturas.ivafact, facturas.totalfact, facturas.status , facturas.[total gastos_op] , facturas.GASTOS_OPERACION, facturas.antes_refrendo FROM  facturas " +
                 " INNER JOIN " + caja + " ON facturas.factura = " + caja + ".folio WHERE " +
                 " facturas.FechaFact='" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' and " + caja + ".concepto like '%" + letra + "%' order by facturas.factura asc" +
            "", conexionmy);
@@ -1048,7 +1090,8 @@ namespace EKPolizasSemp
             }
             else
             {
-                string FACTURA, CONTRATO, DEBE, INTERES, IVA, TOTALFACT, STATUS, FECHACONS, PRESTAMO = "0", quince = "0";
+                string FACTURA, CONTRATO, DEBE, INTERES, IVA, TOTALFACT, STATUS, FECHACONS, PRESTAMO = "0", quince = "0", TOTAL_GASTOS_OP="0", GASTOS_OP="0",ANTES_REFRENDO="0";
+                decimal SumaGastosOperacion = 0;
                 foreach (DataRow dr in tablacobros.Rows)
                 {
 
@@ -1060,6 +1103,34 @@ namespace EKPolizasSemp
                     IVA = dr[4].ToString(); //status
                     TOTALFACT = dr[5].ToString(); //prestamo $$
                     STATUS = dr[6].ToString();//contratodr.Cells[6].Value.ToString();//contrato
+                    
+                    TOTAL_GASTOS_OP = dr[7].ToString();// 
+                    GASTOS_OP = dr[8].ToString();// 
+                    ANTES_REFRENDO = dr[9].ToString();
+
+                    if (!string.IsNullOrEmpty(TOTAL_GASTOS_OP)|| !string.IsNullOrWhiteSpace(TOTAL_GASTOS_OP))
+                    {
+                        if (!string.IsNullOrEmpty(GASTOS_OP) || !string.IsNullOrWhiteSpace(GASTOS_OP))
+                        {
+                            if(decimal.Parse(TOTALFACT) != (decimal.Parse(TOTAL_GASTOS_OP)  + decimal.Parse(ANTES_REFRENDO)))
+                            {
+
+                                SumaGastosOperacion += decimal.Parse(TOTAL_GASTOS_OP);
+
+                            }
+
+                            //if(!GASTOS_OP.Equals(TOTAL_GASTOS_OP))
+                            //{
+                               
+                            //}
+
+
+                        }
+
+                     
+
+                    }
+
 
                     //NUMERO DE LA CUENTA
                     conexionmy.Open();
@@ -1120,7 +1191,7 @@ namespace EKPolizasSemp
                         mes_fechacons = Convert.ToDateTime(FECHACONS).ToString("MM");
 
 
-                        año_inicial_uno = 2006;
+                        año_inicial_uno = 2011;//2006
                         nom_uno = 1;
                         valor_uno = Convert.ToInt32(año_fechacons);//año actual
 
@@ -1228,6 +1299,100 @@ namespace EKPolizasSemp
                         conexionmy.Close();
                     }
 
+
+                    //CUENTA SI ES QUE EXISTEN GASTOS DE OPERACION NO FACTURADOS
+                    //ingreso el registro en la poliza la cuenta de cobros de gastos de operacion
+
+                    if (SumaGastosOperacion > 0)
+                    {
+
+                        //string.Format("{0:0.000000}", SumaGastosOperacion);
+
+                        #region TRASH
+                        //int año_inicial_uno, nom_uno, valor_uno;
+                        //string seis_uno = "";
+                        //string cuatro_uno;
+                        //string CuentaGastos = "";
+
+                        //string año_fechacons, mes_fechacons;
+                        //año_fechacons = Convert.ToDateTime(fecha_uno).ToString("yyyy");
+                        //mes_fechacons = Convert.ToDateTime(fecha_uno).ToString("MM");
+
+
+                        //año_inicial_uno = 2006;
+                        //nom_uno = 1;
+                        //valor_uno = Convert.ToInt32(año_fechacons);
+
+                        //cuatro_uno = "0" + mes_fechacons;
+
+                        //while (año_inicial_uno < valor_uno)
+                        //{
+                        //    nom_uno = nom_uno + 1;
+                        //    año_inicial_uno = año_inicial_uno + 1;
+
+                        //}
+                        //if (nom_uno < 10)
+                        //{
+                        //    seis_uno = Convert.ToString("00" + nom_uno);
+                        //}
+                        //if (nom_uno >= 10)
+                        //{
+                        //    seis_uno = Convert.ToString("0" + nom_uno);
+                        //}
+
+                        //CuentaGastos = "1003" + "-" + seis_uno + "-" + cuatro_uno; 
+                        #endregion
+
+
+
+                        //CUENTA DEL GASTO DE OPERACION
+                        conexionmy.Open();
+                        SqlCommand comando_GastosOperacion_1 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + CUENTA_INTERES + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        comando_GastosOperacion_1.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+
+                        //leyenda iva
+                        conexionmy.Open();
+                        SqlCommand comando_GastosOperacion_2 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "GAST OP-"+ FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                        comando_GastosOperacion_2.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+
+                        //ESPACIO
+                        conexionmy.Open();
+                        SqlCommand comando_GastosOperacion_3 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta)VALUES('')", conexionmy);
+                        comando_GastosOperacion_3.ExecuteNonQuery();
+                        conexionmy.Close();
+
+
+                        conexionmy.Open();
+                        SqlCommand comando_GastosOperacion_4 = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + string.Format("{0:0.000000}", SumaGastosOperacion) + ",1.00" + "')", conexionmy);
+                        comando_GastosOperacion_4.ExecuteNonQuery();
+                        conexionmy.Close();
+
+                        SumaGastosOperacion = 0;
+
+
+                    }
+
+
+
+
+
+
+
+
+
+
+                    //FIN DE CUENTA SI ES QUE EXISTEN GASTOS DE OPERACION
+
+
+
+
+
                     //'ahora la cuenta del iva
                     conexionmy.Open();
                     SqlCommand comando_Iza = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + CUENTA_IVA + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
@@ -1270,6 +1435,10 @@ namespace EKPolizasSemp
 
                     //
                 }//cierre del ciclo for each
+
+             
+
+
                 conexionmy.Open();
                 SqlCommand comando_J = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('FIN')", conexionmy);
                 comando_J.ExecuteNonQuery();
@@ -1321,7 +1490,24 @@ namespace EKPolizasSemp
                 progressBarX3.Maximum = dias_en_mes;
                 progressBarX3.Value = 0;
                 //string CONTRATO, STATUS, PRESTAMO;
-                for (nveces3 = 1; nveces3 <= dias_en_mes; nveces3++)
+                int _nveces;
+                _nveces = 1;
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        _nveces = int.Parse(txtDias.Text);
+                        dias_en_mes = int.Parse(txtDiasFinal.Text);
+                    }
+                    else
+                    {
+                        _nveces = 1;
+                    }
+
+                }
+                    
+                for (nveces3 = _nveces; nveces3 <= dias_en_mes; nveces3++)
                 {
 
                     backgroundWorker4.ReportProgress(nveces3);
@@ -1355,7 +1541,8 @@ namespace EKPolizasSemp
                     if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                        //SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "- " + NUMERO_DE_CAJA + " " + mes_letra + " " + fecha_cinco + " " + server.Substring(9, 5) + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1363,7 +1550,8 @@ namespace EKPolizasSemp
                     else if (empresa_Conta == "MONTE ROS SA DE CV")
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        //SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + " " + server.Substring(9, 5) + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1371,7 +1559,8 @@ namespace EKPolizasSemp
                     else
                     {
                         conexionmy.Open();
-                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                        //SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + "')", conexionmy);
+                        SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO diario_poliza(cuenta)VALUES('" + "Interes Diario " + LUGAR_CONTA + "-" + NUMERO_DE_CAJA + " " + server.Substring(9,5) + "')", conexionmy);
                         leyendaP.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -1716,6 +1905,7 @@ namespace EKPolizasSemp
 
         #endregion
 
+
         #region Interes Semanal
 
         //CREAR EL TABLE DEL POOL DE POLIZA DE INTERES SEMANAL
@@ -1739,6 +1929,8 @@ namespace EKPolizasSemp
                 DateTime fecha_dia_inicial;
                 //mes
                 //año
+
+
                 total_dias = DateTime.DaysInMonth(Convert.ToInt32(año), Convert.ToInt32(mes));
                 mes_configurado = Convert.ToInt32(mes);
                 fecha_dia_final = Convert.ToDateTime(año + "-" + mes + "-" + total_dias);
@@ -1750,7 +1942,30 @@ namespace EKPolizasSemp
                 //progressBarX4.Maximum = dias_en_mes;
                 //progressBarX4.Value = 0;
 
-               
+
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        total_dias = int.Parse(txtDiasFinal.Text);
+
+
+                        if (txtDiasFinal.Text.Length == 1)
+                        {
+                            txtDiasFinal.Text = "0" + txtDiasFinal.Text;
+                        }
+                        if (txtDias.Text.Length == 1)
+                        {
+                            txtDias.Text = "0" + txtDias.Text;
+                        }
+                        fecha_dia_final = Convert.ToDateTime(año + "-" + mes + "-" + txtDiasFinal.Text);
+                        fecha_dia_inicial = Convert.ToDateTime(año + "-" + mes + "-" + txtDias.Text);
+                        contador = total_dias;
+                    }
+                 
+                }
+
+
                 while (contador <= total_dias)//segun el numero de dias del mes
                 {
                     backgroundWorker5.ReportProgress(contador);
@@ -1782,7 +1997,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);//dia
+                    //SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + "')", conexionmy);//dia
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " " + NUMERO_DE_CAJA + " " + server.Substring(9,5)  + "')", conexionmy);//dia
                     diadepolizas.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1794,8 +2010,13 @@ namespace EKPolizasSemp
                     ////este es diferente con iff segn la empresa
 
                     //obtengo la primer fecha
+                
+                   
                     primer_fecha = año + "-" + mes + "-" + contador;
                     segunda_fecha = año + "-" + mes + "-" + contador;
+                    
+
+                        
                     //obtengo el dia lunes
                     que_dia_es = Convert.ToDateTime(primer_fecha).DayOfWeek.ToString("d");
                     //verifico que dias
@@ -1949,6 +2170,37 @@ namespace EKPolizasSemp
                         //  MessageBox.Show("" + fecha_lunes.ToString("yyyy-MM-dd 00:00:00") +
                         // fecha_domingo.ToString("yyyy-MM-dd 00:00:00") );
                         //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+
+                        if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                        {
+                            if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                            {
+                                if (txtDiasFinal.Text.Length == 1)
+                                {
+                                    txtDiasFinal.Text = "0" + txtDiasFinal.Text;
+                                }
+                                if (txtDias.Text.Length == 1)
+                                {
+                                    txtDias.Text = "0" + txtDias.Text;
+                                }
+                                fecha_lunes = Convert.ToDateTime(año + "-" + mes + "-" + txtDias.Text);
+                                fecha_domingo = Convert.ToDateTime(año + "-" + mes + "-" + txtDiasFinal.Text);
+
+                            }
+
+                        }
+
+                     
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+
+
+
                         SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
                         " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + mi_Caja + " " +
                         " ON facturas.factura = " + mi_Caja + ".folio AND facturas.STATUS = 'VALIDO'  WHERE " +
@@ -2300,7 +2552,30 @@ namespace EKPolizasSemp
 
                 //progressBarX5.Maximum = dias_en_mes;
                 //progressBarX5.Value = 0;
-               
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        total_dias = int.Parse(txtDiasFinal.Text);
+
+
+                        if (txtDiasFinal.Text.Length == 1)
+                        {
+                            txtDiasFinal.Text = "0" + txtDiasFinal.Text;
+                        }
+                        if (txtDias.Text.Length == 1)
+                        {
+                            txtDias.Text = "0" + txtDias.Text;
+                        }
+                        fecha_dia_final = Convert.ToDateTime(año + "-" + mes + "-" + txtDiasFinal.Text);
+                        fecha_dia_inicial = Convert.ToDateTime(año + "-" + mes + "-" + txtDias.Text);
+                        contador = total_dias;
+                    }
+                }
+
+                    
+                //////////////////////////////////////////////
+
                 while (contador <= total_dias)//segun el numero de dias del mes
                 {
                     backgroundWorker6.ReportProgress(contador);
@@ -2332,7 +2607,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);//dia
+                    //SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);//dia
+                    SqlCommand diadepolizas = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "Remisiones " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + " " + server.Substring(9,5) + "')", conexionmy);//dia
                     diadepolizas.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -2502,8 +2778,41 @@ namespace EKPolizasSemp
                         //string letra = "DESEMP";
                         DataTable tablacobros_Y = new DataTable();
                         tablacobros_Y.Clear();
-                       
-                       SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
+
+
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                        {
+                            if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                            {
+                                if (txtDiasFinal.Text.Length == 1)
+                                {
+                                    txtDiasFinal.Text = "0" + txtDiasFinal.Text;
+                                }
+                                if (txtDias.Text.Length == 1)
+                                {
+                                    txtDias.Text = "0" + txtDias.Text;
+                                }
+                                fecha_lunes = Convert.ToDateTime(año + "-" + mes + "-" + txtDias.Text);
+                                fecha_domingo = Convert.ToDateTime(año + "-" + mes + "-" + txtDiasFinal.Text);
+
+                            }
+
+
+
+                        }
+                           
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+                        //MessageBox.Show("" + mi_Caja);
+
+
+
+                        SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
                             " SELECT SUM(Importe) AS Expr1" +
                    " FROM remisiones " +
                   " WHERE     (Fecha BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' AND '" + fecha_domingo.ToString("dd-MM-yyyy") + "') " +
@@ -2592,7 +2901,7 @@ namespace EKPolizasSemp
 
                         }
 
-                        int año_inicial = 2006;
+                        int año_inicial = 2011;//2006
                         int nom = 1;
                         int valor = Convert.ToInt32(año);
                         string cuatro = "0" + mes;
@@ -2793,14 +3102,50 @@ namespace EKPolizasSemp
         {
             try
             {
-
+                //caja = this.comboBoxEx4.Text;
                 letra6 = textBoxX7.Text;
                 SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
+
+                //obtengo datos de la caja
+              
+                DataTable tablasql = new DataTable();
+                SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                    "Select *  from contabilidad where leyenda2='" + caja + "'" +
+                    "", conexionmy);
+                datosSql.Fill(tablasql);
+                LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
+                CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
+                CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
+                CUENTA_IVA = tablasql.Rows[0].ItemArray[8].ToString();
+                NUMERO_DE_CAJA = tablasql.Rows[0].ItemArray[3].ToString();
+                DEPARTAMENTO = tablasql.Rows[0].ItemArray[9].ToString();
+                CUENTA_PRESTAMOS = tablasql.Rows[0].ItemArray[5].ToString();
+                TABLA_CAJA = tablasql.Rows[0].ItemArray[11].ToString();
                 //progressBarX2.Maximum = dias_en_mes;
                 //progressBarX2.Value = 0;
                 //string CONTRATO, STATUS, PRESTAMO;
-                for (nveces2 = 1; nveces2 <= dias_en_mes; nveces2++)
+                int _nveces;
+                _nveces = 1;
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        _nveces = int.Parse(txtDias.Text);
+                        dias_en_mes = int.Parse(txtDiasFinal.Text);
+                    }
+                    else
+                    {
+                        _nveces = 1;
+                    }
+
+
+
+                }
+                    
+
+                for (nveces2 = _nveces; nveces2 <= dias_en_mes; nveces2++)
                 {
                     backgroundWorker7.ReportProgress(nveces2);
 
@@ -2831,11 +3176,12 @@ namespace EKPolizasSemp
 
                     conexionmy.Open();
                     SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('" + "CONTRATOS DESEMPENADOS DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA + "')", conexionmy);
+                    //SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('" + "CONTRATOS DESEMPENADOS DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA + " " + server.Substring(9,5) + "')", conexionmy);
                     leyendaP.ExecuteNonQuery();
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + " " + server.Substring(9, 5) + "')", conexionmy);
                     leyendaPL.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -2858,6 +3204,11 @@ namespace EKPolizasSemp
 
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
+            //obtengo datos de la caja
+          
+          
+
+
             fecha_tres = año;
             fecha_cuatro = mes;
 
@@ -2866,7 +3217,7 @@ namespace EKPolizasSemp
             string seis = "";
             string cuatro;
             string catorce;
-            año_inicial = 2006;
+            año_inicial = 2011;//2006
             nom = 1;
             valor = Convert.ToInt32(año);
             cuatro = "0" + mes;
@@ -2957,7 +3308,7 @@ namespace EKPolizasSemp
                         mes_fechacons = Convert.ToDateTime(FECHACONS).ToString("MM");
 
 
-                        año_inicial_uno = 2006;
+                        año_inicial_uno = 2011;//2006
                         nom_uno = 1;
                         valor_uno = Convert.ToInt32(año_fechacons);//año actual
 
@@ -3085,12 +3436,43 @@ namespace EKPolizasSemp
         {
             try
             {
-
+               // caja = this.comboBoxEx4.Text;
                 letra7 = textBoxX8.Text;
                 SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
-                
-                for (nveces2 = 1; nveces2 <= dias_en_mes; nveces2++)
+                DataTable tablasql = new DataTable();
+                SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                    "Select *  from contabilidad where leyenda2='" + caja + "'" +
+                    "", conexionmy);
+                datosSql.Fill(tablasql);
+                LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
+                CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
+                CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
+                CUENTA_IVA = tablasql.Rows[0].ItemArray[8].ToString();
+                NUMERO_DE_CAJA = tablasql.Rows[0].ItemArray[3].ToString();
+                DEPARTAMENTO = tablasql.Rows[0].ItemArray[9].ToString();
+                CUENTA_PRESTAMOS = tablasql.Rows[0].ItemArray[5].ToString();
+                TABLA_CAJA = tablasql.Rows[0].ItemArray[11].ToString();
+
+                int _nveces;
+                _nveces = 1;
+                if (!string.IsNullOrEmpty(txtDias.Text) && !string.IsNullOrEmpty(txtDiasFinal.Text))
+                {
+
+                    if (int.Parse(txtDias.Text) > 0 && int.Parse(txtDiasFinal.Text) > 0)
+                    {
+                        _nveces = int.Parse(txtDias.Text);
+                        dias_en_mes = int.Parse(txtDiasFinal.Text);
+                    }
+                    else
+                    {
+                        _nveces = 1;
+                    }
+
+                }
+                   
+
+                for (nveces2 = _nveces; nveces2 <= dias_en_mes; nveces2++)
                 {
                     backgroundWorker8.ReportProgress(nveces2);
 
@@ -3120,12 +3502,12 @@ namespace EKPolizasSemp
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + "INTERES DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand leyendaP = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + "INTERES DEL  " + fecha_dos + "  " + NUMERO_DE_CAJA  + "')", conexionmy);
                     leyendaP.ExecuteNonQuery();
                     conexionmy.Close();
 
                     conexionmy.Open();
-                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + "')", conexionmy);
+                    SqlCommand leyendaPL = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + LOCALIDAD + "  " + "CAJA # " + NUMERO_DE_CAJA + " " + server.Substring(9, 5) + "')", conexionmy);
                     leyendaPL.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -3156,7 +3538,7 @@ namespace EKPolizasSemp
             string seis = "";
             string cuatro;
             string catorce;
-            año_inicial = 2006;
+            año_inicial = 2011;//2006
             nom = 1;
             valor = Convert.ToInt32(año);
             cuatro = "0" + mes;
@@ -3675,6 +4057,52 @@ namespace EKPolizasSemp
         private void backgroundWorker8_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             SoloInteresEivaCaja();
+        }
+
+        private void checkBoxX6_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBoxX7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDias_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = false;
+            }
+            else
+           if (Char.IsControl(e.KeyChar)) //permitir teclas de control como retroceso
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                //el resto de teclas pulsadas se desactivan
+                e.Handled = true;
+            }
+        }
+
+        private void txtDiasFinal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = false;
+            }
+            else
+            if (Char.IsControl(e.KeyChar)) //permitir teclas de control como retroceso
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                //el resto de teclas pulsadas se desactivan
+                e.Handled = true;
+            }
         }
 
         private void backgroundWorker8_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
