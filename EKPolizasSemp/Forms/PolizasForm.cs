@@ -16,6 +16,7 @@ namespace EKPolizasSemp
     using System.Linq;
     using DevComponents.DotNetBar.Controls;
     #endregion
+
     public partial class PolizasForm : Office2007Form
     {
 
@@ -64,6 +65,8 @@ namespace EKPolizasSemp
 
         DataTable tablecaja_dos = new DataTable();
 
+        int activarCombo = 0;
+
         #endregion
       
         #region Events (eventos)
@@ -93,7 +96,16 @@ namespace EKPolizasSemp
 
         private void comboBoxEx1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            paso2();
+            if (activarCombo == 0)
+            {
+                activarCombo = 1;
+
+            }
+            else
+            {
+                paso2();
+            }
+           
         }
         //GENERATE
         private void buttonX2_Click(object sender, EventArgs e)
@@ -464,11 +476,14 @@ namespace EKPolizasSemp
 
             try
             {
-                SqlConnection conexionmy = new SqlConnection(sqlcnx);
+                SqlConnection conexionmy = new SqlConnection(sqlcnx + ";Connection Timeout=30");
                 DataTable tablasql = new DataTable();
                 SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1 " +
                     "Select Logotipo, BD, lugar_conta, Empresa  from Localidades where  [Nombre Sucursal]='" + this.comboBoxEx1.Text + "'" +
                     "", conexionmy);
+
+
+
                 datosSql.Fill(tablasql);
                 base_de_datos = tablasql.Rows[0].ItemArray[1].ToString();
                 LUGAR_CONTA = tablasql.Rows[0].ItemArray[2].ToString();
@@ -498,7 +513,7 @@ namespace EKPolizasSemp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No encontre datos de localidad intenta con una diferente por favor");
+                MessageBox.Show(ex.Message.ToString() + "-No encontre datos de localidad intenta con una diferente por favor");
             }
 
 
