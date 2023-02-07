@@ -357,6 +357,7 @@
             // 
             // groupPanel1
             // 
+            this.groupPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(239)))), ((int)(((byte)(242)))));
             this.groupPanel1.CanvasColor = System.Drawing.SystemColors.Control;
             this.groupPanel1.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
             this.groupPanel1.Controls.Add(this.progressBarX7);
@@ -859,7 +860,7 @@
             this.MinimumSize = new System.Drawing.Size(789, 471);
             this.Name = "PolizasForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EK Polizas Semp V.4.0";
+            this.Text = "EK Polizas Semp V.4.1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

@@ -628,9 +628,13 @@ namespace EKPolizasSemp
             //obtengo datos de la caja
             SqlConnection conexionmy = new SqlConnection(sqlcnx);
             DataTable tablasql = new DataTable();
-            SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+            SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1  " +
                 "Select *  from contabilidad where leyenda2='" + caja + "'" +
                 "", conexionmy);
+
+            //SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+            //    "Select *  from contabilidad where leyenda2='" + caja + "'" +
+            //    "", conexionmy);
             datosSql.Fill(tablasql);
             LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
             CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
@@ -2148,10 +2152,14 @@ namespace EKPolizasSemp
                         mi_Caja = dr[0].ToString();//contrato
 
                         DataTable tablasql = new DataTable();
-                        SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
-                            "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
-                            "", conexionmy);
+                        SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1 " +
+                          "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                          "", conexionmy);
                         datosSql.Fill(tablasql);
+                        //SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                        //    "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                        //    "", conexionmy);
+                        //datosSql.Fill(tablasql);
                         LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
                         CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
                         CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
@@ -2338,7 +2346,7 @@ namespace EKPolizasSemp
                         if (empresa_Conta == "DDR GARCIA SA DE CV")
                         {
                             conexionmy.Open();
-                            SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "4100-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "401-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                             comando_D_S_T.ExecuteNonQuery();
                             conexionmy.Close();
 
@@ -2351,7 +2359,7 @@ namespace EKPolizasSemp
                         else if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                         {
                             conexionmy.Open();
-                            SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "4100-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "401-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                             comando_D_S_T.ExecuteNonQuery();
                             conexionmy.Close();
 
@@ -2362,15 +2370,30 @@ namespace EKPolizasSemp
                             conexionmy.Close();
 
                         }
-                       
+                        else if (empresa_Conta == "MONTE ROS SA DE CV")
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "401-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_S_T.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                            conexionmy.Open();
+                            //SqlCommand comando_Bwe = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            SqlCommand comando_Bwe = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Interes " + server.Substring(9, 5) + "')", conexionmy);
+                            comando_Bwe.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+
+
                         ////LAS LEYENDAS2 segun la empresa entr otr if
                         //if (empresa_Conta == "DDR GARCIA SA DE CV")
                         //{
-                           
+
                         //}
                         //else if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                         //{
-                          
+
 
                         //}
 
@@ -2399,7 +2422,7 @@ namespace EKPolizasSemp
                         if (empresa_Conta == "DDR GARCIA SA DE CV")
                         {
                             conexionmy.Open();
-                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "2180-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "213-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                             comando_D_Hiw.ExecuteNonQuery();
                             conexionmy.Close();
 
@@ -2412,7 +2435,21 @@ namespace EKPolizasSemp
                         else if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
                         {
                             conexionmy.Open();
-                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "2180-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "213-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_Hiw.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                            conexionmy.Open();
+                            //SqlCommand comando_Bwek = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Desempeños " + LUGAR_CONTA + " C" + NUMERO_DE_CAJA + " " + mes_letra + " " + año + " " + fecha_cinco + "')", conexionmy);
+                            SqlCommand comando_Bwek = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "Iva " + server.Substring(9, 5) + "')", conexionmy);
+                            comando_Bwek.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+                        else if (empresa_Conta == "MONTE ROS SA DE CV")
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO interesSemanal_poliza(cuenta)VALUES('" + "213-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                             comando_D_Hiw.ExecuteNonQuery();
                             conexionmy.Close();
 
@@ -2798,10 +2835,14 @@ namespace EKPolizasSemp
 
 
                         DataTable tablasql = new DataTable();
-                        SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
-                            "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
-                            "", conexionmy);
+                        SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1 " +
+                          "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                          "", conexionmy);
                         datosSql.Fill(tablasql);
+                        //SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                        //    "Select *  from contabilidad where leyenda2='" + mi_Caja + "'" +
+                        //    "", conexionmy);
+                        //datosSql.Fill(tablasql);
                         LOCALIDAD = tablasql.Rows[0].ItemArray[2].ToString();
                         CUENTA_CAJA = tablasql.Rows[0].ItemArray[6].ToString();
                         CUENTA_INTERES = tablasql.Rows[0].ItemArray[7].ToString();
@@ -2964,9 +3005,47 @@ namespace EKPolizasSemp
                         }
                         //TODO:If cuenta 1003
                         string leyenda_cuenta = string.Empty;
-                        leyenda_cuenta = "1155" + "-" + seis + "-" + cuatro;
-                      
+                       // leyenda_cuenta = "106-101" + "-" + seis + "-" + cuatro;
+                        if (empresa_Conta == "DDR GARCIA SA DE CV")
+                        {
+                            leyenda_cuenta = "106-101" + "-" + seis + "-" + cuatro;
+                        }
+                        else if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
+                        {
+                            if (LOCALIDAD == "TLA_2")
+                            {
+                                leyenda_cuenta = "106-101" + "-" + seis + "-" + cuatro;
+
+                            }
+                            if (LOCALIDAD == "TLX_2")
+                            {
+                                leyenda_cuenta = "106-102" + "-" + seis + "-" + cuatro;
+
+                            }
+                            if (LOCALIDAD == "MIX_1")
+                            {
+                                leyenda_cuenta = "106-103" + "-" + seis + "-" + cuatro;
+
+                            }
+
+                        }
+                        else if (empresa_Conta == "MONTE ROS SA DE CV")
+                        {
+                            if (LOCALIDAD == "TLA_3")
+                            {
+                                leyenda_cuenta = "106-101" + "-" + seis + "-" + cuatro;
+
+                            }
+                            if (LOCALIDAD == "PRG_1")
+                            {
+                                leyenda_cuenta = "106-102" + "-" + seis + "-" + cuatro;
+
+                            }
                            
+
+                        }
+
+
 
                         conexionmy.Open();
                         SqlCommand comando_D_S_T = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + leyenda_cuenta + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
@@ -3008,11 +3087,38 @@ namespace EKPolizasSemp
                         comando_B_rea.ExecuteNonQuery();
                         conexionmy.Close();
 
-                        conexionmy.Open();
 
-                        SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "4100-001-002" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
-                        comando_D_Hiw.ExecuteNonQuery();
-                        conexionmy.Close();
+
+
+                        if (empresa_Conta == "DDR GARCIA SA DE CV")
+                        {
+
+                            conexionmy.Open();
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "401-001-001-002" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_Hiw.ExecuteNonQuery();
+                            conexionmy.Close();
+                        }
+                        else if (empresa_Conta == "COMERCIAL INTERMODAL SA DE CV")
+                        {
+                            conexionmy.Open();
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "401-001-001-002" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_Hiw.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+                        else if (empresa_Conta == "MONTE ROS SA DE CV")
+                        {
+
+                            conexionmy.Open();
+                            SqlCommand comando_D_Hiw = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "401-001-001-002" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                            comando_D_Hiw.ExecuteNonQuery();
+                            conexionmy.Close();
+
+                        }
+
+
+
+
 
 
 
@@ -3051,7 +3157,7 @@ namespace EKPolizasSemp
 
 
                         conexionmy.Open();
-                        SqlCommand comando_D_Hiwi = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "2180-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
+                        SqlCommand comando_D_Hiwi = new SqlCommand("USE " + server + " INSERT INTO remisionSemanal_poliza(cuenta)VALUES('" + "213-001-001-001" + "                " + ",  " + DEPARTAMENTO + "')", conexionmy);
                         comando_D_Hiwi.ExecuteNonQuery();
                         conexionmy.Close();
 
