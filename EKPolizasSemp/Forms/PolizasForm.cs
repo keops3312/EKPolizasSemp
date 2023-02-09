@@ -3276,7 +3276,10 @@ namespace EKPolizasSemp
                 //obtengo datos de la caja
 
                 DataTable tablasql = new DataTable();
-                SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                //SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                //    "Select *  from contabilidad where leyenda2='" + caja + "'" +
+                //    "", conexionmy);
+                SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1  " +
                     "Select *  from contabilidad where leyenda2='" + caja + "'" +
                     "", conexionmy);
                 datosSql.Fill(tablasql);
@@ -3393,6 +3396,11 @@ namespace EKPolizasSemp
                 año_inicial = año_inicial + 1;
 
             }
+
+            int numero_ = valor;
+            numero_ = int.Parse(numero_.ToString().Substring(3));
+            nom = numero_;
+
             if (nom < 10)
             {
                 seis = Convert.ToString("00" + nom);
@@ -3401,6 +3409,15 @@ namespace EKPolizasSemp
             {
                 seis = Convert.ToString("0" + nom);
             }
+
+
+         
+
+         
+
+
+
+
             catorce = CUENTA_PRESTAMOS + "-" + seis + "-" + cuatro; //cuanta para prestamos
             string letra = "DESEMP";
             DataTable tablacobros = new DataTable();
@@ -3490,6 +3507,7 @@ namespace EKPolizasSemp
                     int numero = valor_uno;
                     numero = int.Parse(numero.ToString().Substring(3));
                     nom_uno = numero;
+
                     if (nom_uno < 10)
                     {
                         seis_uno = Convert.ToString("00" + nom_uno);
@@ -3611,7 +3629,7 @@ namespace EKPolizasSemp
                 SqlConnection conexionmy = new SqlConnection(sqlcnx);
 
                 DataTable tablasql = new DataTable();
-                SqlDataAdapter datosSql = new SqlDataAdapter("USE " + server + "  " +
+                SqlDataAdapter datosSql = new SqlDataAdapter("USE SEMP2013_NAU_1  " +
                     "Select *  from contabilidad where leyenda2='" + caja + "'" +
                     "", conexionmy);
                 datosSql.Fill(tablasql);
