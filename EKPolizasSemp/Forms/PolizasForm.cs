@@ -828,7 +828,7 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //LAS LEYENDAS
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "PRESTAMO CONTRATO #  " + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "Cj." + NUMERO_DE_CAJA +" PRESCONTRA " + CONTRATO + "')", conexionmy);
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
@@ -859,7 +859,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //ahora leyenda caja
                     conexionmy.Open();
-                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "CAJA" + " " + NUMERO_DE_CAJA + " CONTRATO #  " + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + LOCALIDAD + "Cj." + NUMERO_DE_CAJA + " PRESCONTRA " + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO prestamos_poliza(cuenta)VALUES('" + "CAJA" + " " + NUMERO_DE_CAJA + " CONTRATO #  " + CONTRATO + "')", conexionmy);
                     comando_F.ExecuteNonQuery();
                     conexionmy.Close();
                     //inserto espacio
@@ -1055,11 +1056,18 @@ namespace EKPolizasSemp
             string letra = "DESEMP";
             DataTable tablacobros = new DataTable();
             tablacobros.Clear();
+           // SqlDataAdapter comando_carga = new SqlDataAdapter("USE " + server +
+           //" SELECT facturas.factura, facturas.contrato, " + caja + ".debe, facturas.importefact, facturas.ivafact, facturas.totalfact, facturas.status , facturas.[total gastos_op] , facturas.GASTOS_OPERACION, facturas.antes_refrendo FROM  facturas " +
+           //     " INNER JOIN " + caja + " ON facturas.factura = " + caja + ".folio  WHERE " +
+           //     " facturas.FechaFact='" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' and " + caja + ".concepto like '%" + letra + "%' order by facturas.factura asc" +
+           //"", conexionmy);
+
+
             SqlDataAdapter comando_carga = new SqlDataAdapter("USE " + server +
-           " SELECT facturas.factura, facturas.contrato, " + caja + ".debe, facturas.importefact, facturas.ivafact, facturas.totalfact, facturas.status , facturas.[total gastos_op] , facturas.GASTOS_OPERACION, facturas.antes_refrendo FROM  facturas " +
-                " INNER JOIN " + caja + " ON facturas.factura = " + caja + ".folio WHERE " +
-                " facturas.FechaFact='" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' and " + caja + ".concepto like '%" + letra + "%' order by facturas.factura asc" +
-           "", conexionmy);
+     " SELECT facturas.factura, facturas.contrato, " + caja + ".debe, facturas.importefact, facturas.ivafact, facturas.totalfact, facturas.status , facturas.[total gastos_op] , facturas.GASTOS_OPERACION, facturas.antes_refrendo FROM  facturas " +
+          " INNER JOIN " + caja + " ON facturas.factura = " + caja + ".folio  and facturas.FechaFact=" + caja + ".Fecha WHERE " +
+          " facturas.FechaFact='" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' and " + caja + ".Fecha='" + Convert.ToDateTime(fecha_uno).ToString("yyyy-dd-MM") + "' and " + caja + ".concepto like '%" + letra + "%' order by facturas.factura asc" +
+     "", conexionmy);
 
             //comienza el if de lleno o vacio
             comando_carga.Fill(tablacobros);
@@ -1114,7 +1122,9 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //LAS LEYENDAS
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "' )", conexionmy);
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);
+                    //'" + LOCALIDAD + "  " + "CAJA N " + NUMERO_DE_CAJA + "'
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
@@ -1213,7 +1223,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //ahora leyenda caja
                     conexionmy.Open();
-                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                     comando_F.ExecuteNonQuery();
                     conexionmy.Close();
                     //inserto espacio
@@ -1253,7 +1264,8 @@ namespace EKPolizasSemp
 
                     //ahora leyenda interes
                     conexionmy.Open();
-                    SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                    SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "INT- " + FACTURA + " " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);
                     comando_Iaa.ExecuteNonQuery();
                     conexionmy.Close();
 
@@ -1343,7 +1355,8 @@ namespace EKPolizasSemp
 
                         //leyenda iva
                         conexionmy.Open();
-                        SqlCommand comando_GastosOperacion_2 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "GAST OP-" + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                        //SqlCommand comando_GastosOperacion_2 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "GAST OP-" + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                        SqlCommand comando_GastosOperacion_2 = new SqlCommand("USE " + server + " INSERT into cobros_poliza(cuenta) VALUES('" + "GAST OP-" + FACTURA + " " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                         comando_GastosOperacion_2.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -2206,12 +2219,20 @@ namespace EKPolizasSemp
 
 
 
+                       // SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
+                       // " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + mi_Caja + " " +
+                       // " ON facturas.factura = " + mi_Caja + ".folio AND facturas.STATUS = 'VALIDO'  WHERE " +
+                       // " facturas.FechaFact BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' and " +
+                       // " '" + fecha_domingo.ToString("dd-MM-yyyy") + "' AND " + mi_Caja + ".concepto like '%DESEMP%'  " +
+                       //"", conexionmy);
+
+
                         SqlDataAdapter comando_carga_Y = new SqlDataAdapter("USE " + server +
-                        " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + mi_Caja + " " +
-                        " ON facturas.factura = " + mi_Caja + ".folio AND facturas.STATUS = 'VALIDO'  WHERE " +
-                        " facturas.FechaFact BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' and " +
-                        " '" + fecha_domingo.ToString("dd-MM-yyyy") + "' AND " + mi_Caja + ".concepto like '%DESEMP%'  " +
-                       "", conexionmy);
+                     " SELECT sum(ImporteFact), sum(IVAFACT) FROM  facturas INNER JOIN " + mi_Caja + " " +
+                     " ON facturas.factura = " + mi_Caja + ".folio AND facturas.STATUS = 'VALIDO'  WHERE " +
+                     " facturas.FechaFact BETWEEN  '" + fecha_lunes.ToString("dd-MM-yyyy") + "' and " +
+                     " '" + fecha_domingo.ToString("dd-MM-yyyy") + "' AND " + mi_Caja + ".concepto like '%DESEMP%'  " +
+                    "", conexionmy);
                         tablacobros_Y.Clear();
 
                         //comienza el if de lleno o vacio
@@ -3027,6 +3048,11 @@ namespace EKPolizasSemp
                                 leyenda_cuenta = "106-103" + "-" + seis + "-" + cuatro;
 
                             }
+                            if (LOCALIDAD == "MIX_2")
+                            {
+                                leyenda_cuenta = "106-104" + "-" + seis + "-" + cuatro;
+
+                            }
 
                         }
                         else if (empresa_Conta == "MONTE ROS SA DE CV")
@@ -3455,7 +3481,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //LAS LEYENDAS
                     conexionmy.Open();
-                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                    SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                     comando_B.ExecuteNonQuery();
                     conexionmy.Close();
                     //EL MONTO DEL PRESTAMO
@@ -3528,7 +3555,8 @@ namespace EKPolizasSemp
                     conexionmy.Close();
                     //ahora leyenda caja
                     conexionmy.Open();
-                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + "')", conexionmy);
+                    //SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                    SqlCommand comando_F = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_desempenos(cuenta)VALUES('C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                     comando_F.ExecuteNonQuery();
                     conexionmy.Close();
                     //inserto espacio
@@ -3797,7 +3825,8 @@ namespace EKPolizasSemp
                         conexionmy.Close();
                         //LAS LEYENDAS
                         conexionmy.Open();
-                        SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                        //SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                        SqlCommand comando_B = new SqlCommand("USE " + server + " INSERT INTO cobros_poliza_interes(cuenta)VALUES('" + FACTURA + "   " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                         comando_B.ExecuteNonQuery();
                         conexionmy.Close();
                         // EL MONTO DEL PRESTAMO
@@ -3821,7 +3850,8 @@ namespace EKPolizasSemp
 
                         //ahora leyenda interes
                         conexionmy.Open();
-                        SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);
+                        //SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                        SqlCommand comando_Iaa = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "INTERESES- " + FACTURA + " " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "
                         comando_Iaa.ExecuteNonQuery();
                         conexionmy.Close();
 
@@ -3851,7 +3881,8 @@ namespace EKPolizasSemp
                         conexionmy.Close();
                         //leyenda iva
                         conexionmy.Open();
-                        SqlCommand comando_Iaabe = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "IVA- " + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);
+                        //SqlCommand comando_Iaabe = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "IVA- " + FACTURA + "   " + "C-" + CONTRATO + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
+                        SqlCommand comando_Iaabe = new SqlCommand("USE " + server + " INSERT into cobros_poliza_interes(cuenta) VALUES('" + "IVA- " + FACTURA + "   " + "C-" + CONTRATO + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "')", conexionmy);// + " " + LOCALIDAD + " " + "CAJA N " + NUMERO_DE_CAJA + "'
                         comando_Iaabe.ExecuteNonQuery();
                         conexionmy.Close();
                         //un nuevo espacio
